@@ -119,10 +119,12 @@ public class PlayerController : MonoBehaviour
                 gameObject.GetComponent<Rigidbody>().useGravity = true;
             }
             ////Checks when the player is at the top of the ladder
-            if (transform.position.y >= other.gameObject.transform.position.y + (ladderLength / 2) - 3)//TODO-Make the number fit pixels
+            if (transform.position.y >= other.gameObject.transform.position.y + (ladderLength / 2))//TODO-Make the number fit pixels
             {
-                transform.position = new Vector3(transform.position.x, other.transform.position.y + (ladderLength / 2)+3, transform.position.z);//TODO-Adjust amount for pixels
+                transform.position = new Vector3(transform.position.x, other.transform.position.y + (ladderLength / 2)+2, transform.position.z);//TODO-Adjust amount for pixels
                 transform.Translate(Vector3.forward * 2);//TODO-adjust for offset of ground
+                gameObject.GetComponent<Rigidbody>().useGravity = true;
+                onLadder = false;
             }
         }
     }
