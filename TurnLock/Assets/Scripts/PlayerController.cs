@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
 
     //For ladder
     public bool onLadder;
+    public bool goingDown = false;
     public float ladderSpeed = 10f;
     public float ladderLength = 38.61533f;
 
@@ -45,6 +46,12 @@ public class PlayerController : MonoBehaviour
         speed = 10f;
         //Move the box
         box.Move(vector, speed);
+    }
+
+    IEnumerator goingDownReset()
+    {
+        yield return new WaitForSeconds(1.0f);
+        goingDown = false;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -110,25 +117,31 @@ public class PlayerController : MonoBehaviour
                 gameObject.GetComponent<Rigidbody>().useGravity = true;
             }
 
-            //Makes the player go down the ladder
-            if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.D))
-            {
-                //Checks if the player is going up or down
-                if (transform.position.y >= other.gameObject.transform.position.y + (ladderLength / 2))
-                {
-                    transform.Translate(Vector3.back * 2);
-                    gameObject.GetComponent<Rigidbody>().useGravity = true;
-                }  
-            }
             ////Checks when the player is at the top of the ladder
-            if (transform.position.y >= other.gameObject.transform.position.y + (ladderLength / 2))//TODO-Make the number fit pixels
+            if (transform.position.y >= other.gameObject.transform.position.y + (ladderLength / 2) && !goingDown)//TODO-Make the number fit pixels
             {
                 transform.position = new Vector3(transform.position.x, other.transform.position.y + (ladderLength / 2)+2, transform.position.z);
-                transform.Translate(Vector3.forward * 2);
+                transform.Translate(Vector3.forward);
                 gameObject.GetComponent<Rigidbody>().useGravity = true;
                 onLadder = false;
             }
         }
+        //For top of ladder collision
+        if (other.gameObject.CompareTag("TopOfLadder"))
+        {
+            //Makes the player go down the ladder
+            if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+            {
+                //Checks if the player is going up or down
+                goingDown = true;
+                transform.Translate(Vector3.back*10);
+                gameObject.GetComponent<Rigidbody>().useGravity = true;
+                onLadder = true;
+                StartCoroutine(goingDownReset());
+                
+            }
+        }
+
         //For door collision
         if (other.gameObject.CompareTag("Door"))
         {
