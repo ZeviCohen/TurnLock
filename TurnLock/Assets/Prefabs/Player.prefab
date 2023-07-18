@@ -111,8 +111,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d40485d3332e476daba47b8e0f17cb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
+  speed: 30
   onLadder: 0
+  goingDown: 0
   ladderSpeed: 20
   ladderLength: 38.61533
   movingPlatform: {fileID: 0}

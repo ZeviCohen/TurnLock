@@ -137,6 +137,7 @@ public class PlayerController : MonoBehaviour
                 transform.Translate(Vector3.back*10);
                 gameObject.GetComponent<Rigidbody>().useGravity = true;
                 onLadder = true;
+                transform.position = new Vector3(other.gameObject.transform.position.x, transform.position.y, transform.position.z);
                 StartCoroutine(goingDownReset());
                 
             }
@@ -149,9 +150,9 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
             {
                 Door door = other.gameObject.GetComponent<Door>();
-                transform.position = new Vector3(door.connectingDoor.transform.position.x,transform.position.y,transform.position.z);
+                transform.position = new Vector3(door.connectingDoor.transform.position.x, door.connectingDoor.transform.position.y, door.connectingDoor.transform.position.z);
                 transform.rotation = door.connectingDoor.transform.rotation;
-                transform.Rotate(new Vector3(0,0,180));
+                transform.Translate(Vector3.back*5);
                 Camera.main.GetComponent<Rotate>().rotate(door.side);
             }
         }
