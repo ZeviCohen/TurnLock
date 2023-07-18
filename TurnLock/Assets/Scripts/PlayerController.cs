@@ -106,7 +106,14 @@ public class PlayerController : MonoBehaviour
                 if (transform.position.y < other.gameObject.transform.position.y + (ladderLength / 2))
                 {
                     onLadder = true;
-                    transform.position = new Vector3(other.gameObject.transform.position.x, transform.position.y, transform.position.z);
+                    if (transform.rotation.eulerAngles.y == 90 || transform.rotation.eulerAngles.y == 270)
+                    {
+                        transform.position = new Vector3(transform.position.x, transform.position.y, other.gameObject.transform.position.z);
+                    }
+                    else
+                    {
+                        transform.position = new Vector3(other.gameObject.transform.position.x, transform.position.y, transform.position.z);
+                    }
                     transform.Translate(Vector3.up * Time.deltaTime * ladderSpeed, Space.World);
                     gameObject.GetComponent<Rigidbody>().useGravity = false;
                 }
@@ -116,7 +123,14 @@ public class PlayerController : MonoBehaviour
                 if (transform.position.y >= other.gameObject.transform.position.y - (ladderLength / 2)+12)
                 {
                     onLadder = true;
-                    transform.position = new Vector3(other.gameObject.transform.position.x, transform.position.y, transform.position.z);
+                    if (transform.rotation.eulerAngles.y == 90 || transform.rotation.eulerAngles.y == 270)
+                    {
+                        transform.position = new Vector3(transform.position.x, transform.position.y, other.gameObject.transform.position.z);
+                    }
+                    else
+                    {
+                        transform.position = new Vector3(other.gameObject.transform.position.x, transform.position.y, transform.position.z);
+                    }
                     transform.Translate(Vector3.down * Time.deltaTime * ladderSpeed, Space.World);
                     gameObject.GetComponent<Rigidbody>().useGravity = false;
                 }
@@ -146,12 +160,21 @@ public class PlayerController : MonoBehaviour
             //Makes the player go down the ladder
             if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
             {
+                print("hi");
                 //Checks if the player is going up or down
                 goingDown = true;
                 transform.Translate(Vector3.back*10);
                 gameObject.GetComponent<Rigidbody>().useGravity = true;
                 onLadder = true;
-                transform.position = new Vector3(other.gameObject.transform.position.x, transform.position.y, transform.position.z);
+                if (transform.rotation.eulerAngles.y == 90 || transform.rotation.eulerAngles.y == 270)
+                {
+                    transform.position = new Vector3(transform.position.x, transform.position.y, other.gameObject.transform.position.z);
+                }
+                else
+                {
+                    transform.position = new Vector3(other.gameObject.transform.position.x, transform.position.y, transform.position.z);
+                }
+                
                 StartCoroutine(goingDownReset());
                 
             }
@@ -161,7 +184,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Door"))
         {
             //Popup-TODO
-            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 Door door = other.gameObject.GetComponent<Door>();
                 transform.position = new Vector3(door.connectingDoor.transform.position.x, door.connectingDoor.transform.position.y, door.connectingDoor.transform.position.z);
