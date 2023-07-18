@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     //For ladder
     private bool onLadder;
     public float ladderSpeed = 3f;
+    public float ladderLength = 16f;
 
     //For moving platform
     public MovingPlatform movingPlatform = null;
@@ -121,9 +122,9 @@ public class PlayerController : MonoBehaviour
                 transform.Translate(Vector3.down * Time.deltaTime * ladderSpeed);
             }
             //Checks when the player is at the top of the ladder
-            if (transform.position.y >= other.gameObject.transform.position.y + 3)//TODO-Make the number fit pixels
+            if (transform.position.y >= other.gameObject.transform.position.y + (ladderLength/2)-3)//TODO-Make the number fit pixels
             {
-                transform.position = new Vector3(transform.position.x, other.transform.position.y+5, transform.position.z);//TODO-Adjust amount for pixels
+                transform.position = new Vector3(transform.position.x, other.transform.position.y+(ladderLength/2), transform.position.z);//TODO-Adjust amount for pixels
                 transform.Translate(Vector3.forward * Time.deltaTime * 2);//TODO-adjust for offset of ground
             }
         }

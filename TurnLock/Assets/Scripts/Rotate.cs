@@ -10,6 +10,11 @@ public class Rotate : MonoBehaviour
         
     }
 
+    public void rotate(float side)
+    {
+        //Todo-research cinemachine
+    }
+
     // Update is called once per frame
     void Update()
     {

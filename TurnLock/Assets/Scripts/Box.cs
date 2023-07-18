@@ -10,6 +10,11 @@ public class Box : MonoBehaviour
         
     }
 
+    public void Move(Vector3 vector, float speed)
+    {
+        transform.Translate(vector * speed * Time.deltaTime);
+    }
+
     // Update is called once per frame
     void Update()
     {
