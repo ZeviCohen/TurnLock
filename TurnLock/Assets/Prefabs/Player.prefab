@@ -97,8 +97,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.54875743, y: 1, z: 1}
+  m_Center: {x: 0.026246607, y: 0, z: 0}
 --- !u!114 &3204391225001378731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,8 +111,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d40485d3332e476daba47b8e0f17cb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
+  speed: 30
   onLadder: 0
+  goingDown: 0
   ladderSpeed: 20
   ladderLength: 38.61533
   movingPlatform: {fileID: 0}

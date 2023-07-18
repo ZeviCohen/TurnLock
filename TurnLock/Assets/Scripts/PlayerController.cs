@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
 
     //For ladder
     public bool onLadder;
+    public bool goingDown = false;
     public float ladderSpeed = 10f;
     public float ladderLength = 38.61533f;
 
@@ -45,6 +46,12 @@ public class PlayerController : MonoBehaviour
         speed = 10f;
         //Move the box
         box.Move(vector, speed);
+    }
+
+    IEnumerator goingDownReset()
+    {
+        yield return new WaitForSeconds(2.0f);
+        goingDown = false;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -92,7 +99,6 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Ladder"))
         {
 
-            //Popup-TODO
             //Makes the player go up the ladder
             if (Input.GetKey(KeyCode.UpArrow)|| Input.GetKey(KeyCode.W))
             {
@@ -100,45 +106,90 @@ public class PlayerController : MonoBehaviour
                 if (transform.position.y < other.gameObject.transform.position.y + (ladderLength / 2))
                 {
                     onLadder = true;
-                    transform.position = new Vector3(other.gameObject.transform.position.x, transform.position.y, transform.position.z);
+                    if (transform.rotation.eulerAngles.y == 90 || transform.rotation.eulerAngles.y == 270)
+                    {
+                        transform.position = new Vector3(transform.position.x, transform.position.y, other.gameObject.transform.position.z);
+                    }
+                    else
+                    {
+                        transform.position = new Vector3(other.gameObject.transform.position.x, transform.position.y, transform.position.z);
+                    }
                     transform.Translate(Vector3.up * Time.deltaTime * ladderSpeed, Space.World);
                     gameObject.GetComponent<Rigidbody>().useGravity = false;
                 }
             }
+            else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+            {
+                if (transform.position.y >= other.gameObject.transform.position.y - (ladderLength / 2)+12)
+                {
+                    onLadder = true;
+                    if (transform.rotation.eulerAngles.y == 90 || transform.rotation.eulerAngles.y == 270)
+                    {
+                        transform.position = new Vector3(transform.position.x, transform.position.y, other.gameObject.transform.position.z);
+                    }
+                    else
+                    {
+                        transform.position = new Vector3(other.gameObject.transform.position.x, transform.position.y, transform.position.z);
+                    }
+                    transform.Translate(Vector3.down * Time.deltaTime * ladderSpeed, Space.World);
+                    gameObject.GetComponent<Rigidbody>().useGravity = false;
+                }
+                else
+                {
+                    gameObject.GetComponent<Rigidbody>().useGravity = true;
+                    onLadder = false;
+                }
+            }
             else
             {
-                gameObject.GetComponent<Rigidbody>().useGravity = true;
+                
             }
 
-            //Makes the player go down the ladder
-            if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.D))
-            {
-                //Checks if the player is going up or down
-                if (transform.position.y >= other.gameObject.transform.position.y + (ladderLength / 2))
-                {
-                    transform.Translate(Vector3.back * 2);
-                    gameObject.GetComponent<Rigidbody>().useGravity = true;
-                }  
-            }
             ////Checks when the player is at the top of the ladder
-            if (transform.position.y >= other.gameObject.transform.position.y + (ladderLength / 2))//TODO-Make the number fit pixels
+            if (transform.position.y >= other.gameObject.transform.position.y + (ladderLength / 2) && !goingDown)//TODO-Make the number fit pixels
             {
                 transform.position = new Vector3(transform.position.x, other.transform.position.y + (ladderLength / 2)+2, transform.position.z);
-                transform.Translate(Vector3.forward * 2);
+                transform.Translate(Vector3.forward);
                 gameObject.GetComponent<Rigidbody>().useGravity = true;
                 onLadder = false;
             }
         }
+        //For top of ladder collision
+        if (other.gameObject.CompareTag("TopOfLadder"))
+        {
+            //Makes the player go down the ladder
+            if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+            {
+                print("hi");
+                //Checks if the player is going up or down
+                goingDown = true;
+                transform.Translate(Vector3.back*10);
+                gameObject.GetComponent<Rigidbody>().useGravity = true;
+                onLadder = true;
+                if (transform.rotation.eulerAngles.y == 90 || transform.rotation.eulerAngles.y == 270)
+                {
+                    transform.position = new Vector3(transform.position.x, transform.position.y, other.gameObject.transform.position.z);
+                }
+                else
+                {
+                    transform.position = new Vector3(other.gameObject.transform.position.x, transform.position.y, transform.position.z);
+                }
+                
+                StartCoroutine(goingDownReset());
+                
+            }
+        }
+
         //For door collision
         if (other.gameObject.CompareTag("Door"))
         {
             //Popup-TODO
-            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 Door door = other.gameObject.GetComponent<Door>();
-                transform.position = new Vector3(door.connectingDoor.transform.position.x,transform.position.y,transform.position.z);
+                transform.position = new Vector3(door.connectingDoor.transform.position.x, door.connectingDoor.transform.position.y, door.connectingDoor.transform.position.z);
                 transform.rotation = door.connectingDoor.transform.rotation;
-                transform.Rotate(new Vector3(0,0,180));
+                transform.Translate(Vector3.back*5);
                 Camera.main.GetComponent<Rotate>().rotate(door.side);
             }
         }
