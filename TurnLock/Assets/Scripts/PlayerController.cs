@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator goingDownReset()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
         goingDown = false;
     }
 
@@ -99,7 +99,6 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Ladder"))
         {
 
-            //Popup-TODO
             //Makes the player go up the ladder
             if (Input.GetKey(KeyCode.UpArrow)|| Input.GetKey(KeyCode.W))
             {
@@ -112,9 +111,24 @@ public class PlayerController : MonoBehaviour
                     gameObject.GetComponent<Rigidbody>().useGravity = false;
                 }
             }
+            else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+            {
+                if (transform.position.y >= other.gameObject.transform.position.y - (ladderLength / 2)+12)
+                {
+                    onLadder = true;
+                    transform.position = new Vector3(other.gameObject.transform.position.x, transform.position.y, transform.position.z);
+                    transform.Translate(Vector3.down * Time.deltaTime * ladderSpeed, Space.World);
+                    gameObject.GetComponent<Rigidbody>().useGravity = false;
+                }
+                else
+                {
+                    gameObject.GetComponent<Rigidbody>().useGravity = true;
+                    onLadder = false;
+                }
+            }
             else
             {
-                gameObject.GetComponent<Rigidbody>().useGravity = true;
+                
             }
 
             ////Checks when the player is at the top of the ladder
