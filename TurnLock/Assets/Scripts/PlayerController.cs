@@ -67,19 +67,6 @@ public class PlayerController : MonoBehaviour
             box = null;
         }
 
-        //For door collision
-        if (collision.gameObject.CompareTag("Door"))
-        {
-            //Popup-TODO
-            if (Input.GetKeyDown(KeyCode.UpArrow)||Input.GetKeyDown(KeyCode.W))
-            {
-                Door door = collision.gameObject.GetComponent<Door>();
-                transform.position = door.connectingDoor.transform.position;
-                transform.rotation = door.connectingDoor.transform.rotation;
-                Camera.main.GetComponent<Rotate>().rotate(door.side);
-            }
-        }
-
         //For moving platform collision
         if (collision.gameObject.CompareTag("MovingPlatform"))
         {
@@ -125,6 +112,19 @@ public class PlayerController : MonoBehaviour
                 transform.Translate(Vector3.forward * 2);//TODO-adjust for offset of ground
                 gameObject.GetComponent<Rigidbody>().useGravity = true;
                 onLadder = false;
+            }
+        }
+        //For door collision
+        if (other.gameObject.CompareTag("Door"))
+        {
+            //Popup-TODO
+            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+            {
+                Door door = other.gameObject.GetComponent<Door>();
+                transform.position = new Vector3(door.connectingDoor.transform.position.x,transform.position.y,transform.position.z);
+                transform.rotation = door.connectingDoor.transform.rotation;
+                transform.Rotate(new Vector3(0,0,180));
+                Camera.main.GetComponent<Rotate>().rotate(door.side);
             }
         }
     }
