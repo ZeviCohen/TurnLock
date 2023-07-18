@@ -96,20 +96,35 @@ public class PlayerController : MonoBehaviour
             //Makes the player go up the ladder
             if (Input.GetKey(KeyCode.UpArrow)|| Input.GetKey(KeyCode.W))
             {
-                onLadder = true;
-                transform.position = new Vector3(other.gameObject.transform.position.x, transform.position.y, transform.position.z);
-                transform.Translate(Vector3.up * Time.deltaTime * ladderSpeed, Space.World);
-                gameObject.GetComponent<Rigidbody>().useGravity = false;
+                //Checks if player is going up or down
+                if (transform.position.y < other.gameObject.transform.position.y + (ladderLength / 2))
+                {
+                    onLadder = true;
+                    transform.position = new Vector3(other.gameObject.transform.position.x, transform.position.y, transform.position.z);
+                    transform.Translate(Vector3.up * Time.deltaTime * ladderSpeed, Space.World);
+                    gameObject.GetComponent<Rigidbody>().useGravity = false;
+                }
             }
             else
             {
                 gameObject.GetComponent<Rigidbody>().useGravity = true;
             }
+
+            //Makes the player go down the ladder
+            if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.D))
+            {
+                //Checks if the player is going up or down
+                if (transform.position.y >= other.gameObject.transform.position.y + (ladderLength / 2))
+                {
+                    transform.Translate(Vector3.back * 2);
+                    gameObject.GetComponent<Rigidbody>().useGravity = true;
+                }  
+            }
             ////Checks when the player is at the top of the ladder
             if (transform.position.y >= other.gameObject.transform.position.y + (ladderLength / 2))//TODO-Make the number fit pixels
             {
-                transform.position = new Vector3(transform.position.x, other.transform.position.y + (ladderLength / 2)+2, transform.position.z);//TODO-Adjust amount for pixels
-                transform.Translate(Vector3.forward * 2);//TODO-adjust for offset of ground
+                transform.position = new Vector3(transform.position.x, other.transform.position.y + (ladderLength / 2)+2, transform.position.z);
+                transform.Translate(Vector3.forward * 2);
                 gameObject.GetComponent<Rigidbody>().useGravity = true;
                 onLadder = false;
             }
