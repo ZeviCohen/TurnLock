@@ -20,10 +20,16 @@ public class PlayerController : MonoBehaviour
     //For box
     public Box box = null;
 
+    //Animator
+    private Animator playerAnim;
+
+    //For door
+    private bool doorDelay = true;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerAnim = GetComponent<Animator>();
     }
 
     private void Move()
@@ -52,6 +58,12 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(2.0f);
         goingDown = false;
+    }
+
+    IEnumerator doorCooldown()
+    {
+        yield return new WaitForSeconds(1.0f);
+        doorDelay = true;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -160,7 +172,6 @@ public class PlayerController : MonoBehaviour
             //Makes the player go down the ladder
             if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
             {
-                print("hi");
                 //Checks if the player is going up or down
                 goingDown = true;
                 transform.Translate(Vector3.back*10);
@@ -184,13 +195,16 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Door"))
         {
             //Popup-TODO
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E)&&doorDelay)
             {
                 Door door = other.gameObject.GetComponent<Door>();
-                transform.position = new Vector3(door.connectingDoor.transform.position.x, door.connectingDoor.transform.position.y, door.connectingDoor.transform.position.z);
+                print(door.connectingDoor.name);
+                transform.position = door.connectingDoor.transform.position;
                 transform.rotation = door.connectingDoor.transform.rotation;
                 transform.Translate(Vector3.back*5);
                 Camera.main.GetComponent<Rotate>().rotate(door.side);
+                doorDelay = false;
+                StartCoroutine(doorCooldown());
             }
         }
     }
