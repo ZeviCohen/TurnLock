@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         playerAnim = GetComponent<Animator>();
+        playerAnim.SetTrigger("");
     }
 
     private void Move()
@@ -152,15 +153,11 @@ public class PlayerController : MonoBehaviour
                     onLadder = false;
                 }
             }
-            else
-            {
-                
-            }
 
             ////Checks when the player is at the top of the ladder
             if (transform.position.y >= other.gameObject.transform.position.y + (ladderLength / 2) && !goingDown)//TODO-Make the number fit pixels
             {
-                transform.position = new Vector3(transform.position.x, other.transform.position.y + (ladderLength / 2)+2, transform.position.z);
+                transform.position = new Vector3(transform.position.x, other.transform.position.y + (ladderLength / 2)+3, transform.position.z);
                 transform.Translate(Vector3.forward);
                 gameObject.GetComponent<Rigidbody>().useGravity = true;
                 onLadder = false;
