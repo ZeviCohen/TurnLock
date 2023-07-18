@@ -5,13 +5,13 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     //For player movement
-    public float speed = 5f;
+    public float speed = 20f;
     private float horizontalInput;
 
     //For ladder
-    private bool onLadder;
-    public float ladderSpeed = 3f;
-    public float ladderLength = 16f;
+    public bool onLadder;
+    public float ladderSpeed = 10f;
+    public float ladderLength = 38.61533f;
 
     //For moving platform
     public MovingPlatform movingPlatform = null;
@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");
         if (!onLadder)
         {
-            transform.Translate(Vector3.right * horizontalInput * speed * Time.deltaTime);
+            transform.Translate(Vector3.right * horizontalInput * speed * Time.deltaTime*-1);
         }
     }
 
@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
     private void MoveBox(Vector3 vector)
     {
         //Change animation and update speed
-        speed = 3f;
+        speed = 10f;
         //Move the box
         box.Move(vector, speed);
     }
@@ -67,19 +67,6 @@ public class PlayerController : MonoBehaviour
             box = null;
         }
 
-        //For door collision
-        if (collision.gameObject.CompareTag("Door"))
-        {
-            //Popup-TODO
-            if (Input.GetKeyDown(KeyCode.UpArrow)||Input.GetKeyDown(KeyCode.W))
-            {
-                Door door = collision.gameObject.GetComponent<Door>();
-                transform.position = door.connectingDoor.transform.position;
-                transform.rotation = door.connectingDoor.transform.rotation;
-                Camera.main.GetComponent<Rotate>().rotate(door.side);
-            }
-        }
-
         //For moving platform collision
         if (collision.gameObject.CompareTag("MovingPlatform"))
         {
@@ -99,7 +86,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         //For ladder collision
         if (other.gameObject.CompareTag("Ladder"))
@@ -107,25 +94,37 @@ public class PlayerController : MonoBehaviour
 
             //Popup-TODO
             //Makes the player go up the ladder
-            if (Input.GetKeyDown(KeyCode.UpArrow)|| Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKey(KeyCode.UpArrow)|| Input.GetKey(KeyCode.W))
             {
                 onLadder = true;
-                transform.position = new Vector3(other.gameObject.transform.position.x, transform.position.y, other.gameObject.transform.position.z);
-                transform.Translate(Vector3.up * Time.deltaTime * ladderSpeed);
-
+                transform.position = new Vector3(other.gameObject.transform.position.x, transform.position.y, transform.position.z);
+                transform.Translate(Vector3.up * Time.deltaTime * ladderSpeed, Space.World);
+                gameObject.GetComponent<Rigidbody>().useGravity = false;
             }
-            //Makes the player go down the ladder
-            else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+            else
             {
-                onLadder = true;
-                transform.position = new Vector3(other.gameObject.transform.position.x, transform.position.y, other.gameObject.transform.position.z);
-                transform.Translate(Vector3.down * Time.deltaTime * ladderSpeed);
+                gameObject.GetComponent<Rigidbody>().useGravity = true;
             }
-            //Checks when the player is at the top of the ladder
-            if (transform.position.y >= other.gameObject.transform.position.y + (ladderLength/2)-3)//TODO-Make the number fit pixels
+            ////Checks when the player is at the top of the ladder
+            if (transform.position.y >= other.gameObject.transform.position.y + (ladderLength / 2))//TODO-Make the number fit pixels
             {
-                transform.position = new Vector3(transform.position.x, other.transform.position.y+(ladderLength/2), transform.position.z);//TODO-Adjust amount for pixels
-                transform.Translate(Vector3.forward * Time.deltaTime * 2);//TODO-adjust for offset of ground
+                transform.position = new Vector3(transform.position.x, other.transform.position.y + (ladderLength / 2)+2, transform.position.z);//TODO-Adjust amount for pixels
+                transform.Translate(Vector3.forward * 2);//TODO-adjust for offset of ground
+                gameObject.GetComponent<Rigidbody>().useGravity = true;
+                onLadder = false;
+            }
+        }
+        //For door collision
+        if (other.gameObject.CompareTag("Door"))
+        {
+            //Popup-TODO
+            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+            {
+                Door door = other.gameObject.GetComponent<Door>();
+                transform.position = new Vector3(door.connectingDoor.transform.position.x,transform.position.y,transform.position.z);
+                transform.rotation = door.connectingDoor.transform.rotation;
+                transform.Rotate(new Vector3(0,0,180));
+                Camera.main.GetComponent<Rotate>().rotate(door.side);
             }
         }
     }
