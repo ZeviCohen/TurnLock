@@ -20,17 +20,17 @@ public class RotateKey : MonoBehaviour
         yield return new WaitForSeconds(turnspeed);
         if (direction == 1)
         {
-            transform.Translate(Vector3.up * Time.deltaTime * 3, Space.World);
+            transform.Translate(Vector3.up * Time.deltaTime * 10, Space.World);
         }
         else if (direction == -1)
         {
-            transform.Translate(Vector3.down * Time.deltaTime * 3, Space.World);
+            transform.Translate(Vector3.down * Time.deltaTime * 10, Space.World);
         }
-        if (transform.position.y >= spawnY + 3)
+        if (transform.position.y >= spawnY + 2)
         {
             direction = -1;
         }
-        else if (transform.position.y <= spawnY - 3)
+        else if (transform.position.y <= spawnY - 0.5f)
         {
             direction = 1;
         }
