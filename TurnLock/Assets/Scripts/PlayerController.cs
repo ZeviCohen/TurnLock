@@ -224,12 +224,6 @@ public class PlayerController : MonoBehaviour
                 movingPlatform = null;
             }
 
-            //For ground collision
-            if (collision.gameObject.CompareTag("Ground"))
-            {
-                onLadder = false;
-            }
-
             //For Box collision
             if (collision.gameObject.CompareTag("Box")&& rb.velocity.x <1 && rb.velocity.z<1)
             {
@@ -417,7 +411,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!rotateAnimation)
+        if (!rotateAnimation && !onLadder)
         {
             Move();
         }
