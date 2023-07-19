@@ -13,6 +13,7 @@ TagManager:
   - PeekColliderLeft
   - PeekColliderRight
   - EndDoor
+  - Lock
   layers:
   - Default
   - TransparentFX
