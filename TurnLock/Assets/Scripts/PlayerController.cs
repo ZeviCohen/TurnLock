@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
 
     //For box
     public Box box = null;
+    public float forceMagnitude = 5f;
 
     //Animator
     private Animator playerAnim;
@@ -30,11 +31,18 @@ public class PlayerController : MonoBehaviour
     //For camera
     public GameObject Camera;
 
+    //Increases gravity
+
+    //Rigidbody
+    private Rigidbody rb;
+
     // Start is called before the first frame update
     void Start()
     {
         playerAnim = GetComponent<Animator>();
         playerAnim.SetTrigger("");
+        Physics.gravity *= 2;
+        rb = GetComponent<Rigidbody>();
     }
 
     private void Move()
@@ -42,7 +50,7 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");
         if (!onLadder)
         {
-            transform.Translate(Vector3.right * horizontalInput * speed * Time.deltaTime*-1);
+            rb.velocity = Vector3.left * horizontalInput * Time.deltaTime * speed;
         }
         if (horizontalInput != 0)
         {
@@ -55,13 +63,6 @@ public class PlayerController : MonoBehaviour
         transform.Translate(Vector3.right * Time.deltaTime * movingPlatform.speed * movingPlatform.direction);
     }
 
-    private void MoveBox(Vector3 vector)
-    {
-        //Change animation and update speed
-        speed = 10f;
-        //Move the box
-        box.Move(vector, speed);
-    }
 
     IEnumerator goingDownReset()
     {
@@ -110,28 +111,10 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(doorCooldown());
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
         if (!rotateAnimation)
         {
-            //For box collision
-            if (collision.gameObject.CompareTag("Box"))
-            {
-                box = collision.gameObject.GetComponent<Box>();
-                if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
-                {
-                    MoveBox(Vector3.left);
-                }
-                else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
-                {
-                    MoveBox(Vector3.right);
-                }
-            }
-            else
-            {
-                box = null;
-            }
-
             //For moving platform collision
             if (collision.gameObject.CompareTag("MovingPlatform"))
             {
@@ -264,6 +247,21 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        Rigidbody rigidbody = hit.collider.attachedRigidbody;
+
+        if (rigidbody != null)
+        {
+            Vector3 forceDirection = hit.gameObject.transform.position - transform.position;
+            forceDirection.y = 0;
+            forceDirection.Normalize();
+
+            rigidbody.AddForceAtPosition(forceDirection*forceMagnitude,transform.position,ForceMode.Impulse);
+        }
+    }
+
 
     // Update is called once per frame
     void Update()
