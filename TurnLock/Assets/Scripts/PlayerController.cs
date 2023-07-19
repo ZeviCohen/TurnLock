@@ -65,7 +65,6 @@ public class PlayerController : MonoBehaviour
         {
             if(Mathf.Abs(rb.velocity.x) < velocityMax || Mathf.Abs(rb.velocity.z) < velocityMax)
             {
-                print(rb.velocity);
                 rb.AddForce(Vector3.right * horizontalInput * speed);
             }
             if (horizontalInput != 0)
