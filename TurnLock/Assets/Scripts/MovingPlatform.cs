@@ -5,10 +5,10 @@ using UnityEngine;
 public class MovingPlatform : MonoBehaviour
 {
     //For moving
-    public float speed = 10f;
-    public float direction;
+    public float speed = 15f;
+    public float direction = 1f;
 
-
+    bool allowChange = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,8 +24,20 @@ public class MovingPlatform : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            direction *= -1;
+            if (allowChange)
+            {
+                print("hi");
+                direction *= -1;
+                StartCoroutine(change());
+            }
         }
+    }
+
+    IEnumerator change()
+    {
+        allowChange = false;
+        yield return new WaitForSeconds(0.5f);
+        allowChange = true;
     }
 
     // Update is called once per frame
