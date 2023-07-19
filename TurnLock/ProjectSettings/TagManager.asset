@@ -9,6 +9,9 @@ TagManager:
   - MovingPlatform
   - Door
   - Box
+  - TopOfLadder
+  - PeekColliderLeft
+  - PeekColliderRight
   layers:
   - Default
   - TransparentFX
