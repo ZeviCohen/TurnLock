@@ -32,9 +32,7 @@ public class PlayerController : MonoBehaviour
     public GameObject Camera;
 
     //Increases gravity
-
-    //Rigidbody
-    private Rigidbody rb;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -42,7 +40,6 @@ public class PlayerController : MonoBehaviour
         playerAnim = GetComponent<Animator>();
         playerAnim.SetTrigger("");
         Physics.gravity *= 2;
-        rb = GetComponent<Rigidbody>();
     }
 
     private void Move()
@@ -50,7 +47,7 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");
         if (!onLadder)
         {
-            rb.velocity = Vector3.left * horizontalInput * Time.deltaTime * speed;
+            transform.Translate(Vector3.right * horizontalInput * speed * Time.deltaTime);
         }
         if (horizontalInput != 0)
         {
@@ -85,25 +82,29 @@ public class PlayerController : MonoBehaviour
 
         //Player moves into door
         yield return new WaitForSeconds(0.1f);
-        transform.Translate(Vector3.forward);
+        transform.Translate(Vector3.back);
         yield return new WaitForSeconds(0.1f);
-        transform.Translate(Vector3.forward);
+        transform.Translate(Vector3.back);
         yield return new WaitForSeconds(0.1f);
-        transform.Translate(Vector3.forward);
+        transform.Translate(Vector3.back);
         yield return new WaitForSeconds(0.1f);
         //Camera rotates
         Camera.GetComponent<Rotate>().rotate(connectingDoor.side, false);
         yield return new WaitForSeconds(5.0f);
         //Player teleports
         transform.position = door.connectingDoor.transform.position;
-        transform.rotation = door.connectingDoor.transform.rotation;
+        Vector3 angles = door.connectingDoor.transform.rotation.eulerAngles;
+        Vector3 newAngles = new Vector3(angles.x, angles.y, transform.rotation.eulerAngles.z);
+        Quaternion finishAngles = new Quaternion();
+        finishAngles.eulerAngles = newAngles;
+        transform.rotation = finishAngles;
         yield return new WaitForSeconds(2.0f);
         //Player moves out of door
-        transform.Translate(Vector3.back);
+        transform.Translate(Vector3.forward);
         yield return new WaitForSeconds(0.1f);
-        transform.Translate(Vector3.back);
+        transform.Translate(Vector3.forward);
         yield return new WaitForSeconds(0.1f);
-        transform.Translate(Vector3.back);
+        transform.Translate(Vector3.forward);
         //Close door
         //Cooldown
         doorDelay = false;
