@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
         {
             if(Mathf.Abs(rb.velocity.x) < velocityMax || Mathf.Abs(rb.velocity.z) < velocityMax)
             {
-                rb.AddForce(Vector3.right * horizontalInput * speed);
+                rb.AddForce(transform.right * horizontalInput * speed);
             }
             if (horizontalInput != 0)
             {
@@ -224,6 +224,12 @@ public class PlayerController : MonoBehaviour
                 movingPlatform = null;
             }
 
+            //For ground collision
+            if (collision.gameObject.CompareTag("Ground"))
+            {
+                onLadder = false;
+            }
+
             //For Box collision
             if (collision.gameObject.CompareTag("Box")&& rb.velocity.x <1 && rb.velocity.z<1)
             {
@@ -246,7 +252,6 @@ public class PlayerController : MonoBehaviour
             //For ladder collision
             if (other.gameObject.CompareTag("Ladder"))
             {
-
                 //Makes the player go up the ladder
                 if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
                 {
@@ -411,7 +416,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!rotateAnimation && !onLadder)
+        if (!rotateAnimation)
         {
             Move();
         }
