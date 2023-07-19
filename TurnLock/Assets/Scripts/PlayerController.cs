@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -179,7 +180,35 @@ public class PlayerController : MonoBehaviour
         rotateAnimation = false;
         StartCoroutine(doorCooldown());
     }
-
+    IEnumerator goInEndDoorAnimation(Collider other)
+    {
+        rotateAnimation = true;
+        EndDoor enddoor = other.gameObject.GetComponent<EndDoor>();
+        //Doors becomes open
+        other.GetComponent<MeshRenderer>().material = enddoor.doorOpen;
+        //Player moves into door
+        playerAnim.SetTrigger("climb");
+        yield return new WaitForSeconds(0.1f);
+        transform.Translate(Vector3.forward);
+        yield return new WaitForSeconds(0.1f);
+        transform.Translate(Vector3.forward);
+        yield return new WaitForSeconds(0.1f);
+        transform.Translate(Vector3.forward);
+        yield return new WaitForSeconds(0.1f);
+        transform.Translate(Vector3.forward);
+        yield return new WaitForSeconds(0.1f);
+        transform.Translate(Vector3.forward);
+        yield return new WaitForSeconds(0.1f);
+        //Turn player invisible
+        spriteRenderer.enabled = false;
+        //Close door
+        other.GetComponent<MeshRenderer>().material = enddoor.doorClose;
+        //Cooldown
+        doorDelay = false;
+        rotateAnimation = false;
+        StartCoroutine(doorCooldown());
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+    }
     private void OnCollisionStay(Collision collision)
     {
         if (!rotateAnimation)
@@ -324,7 +353,14 @@ public class PlayerController : MonoBehaviour
                     StartCoroutine(goInDoorAnimation(other));
                 }
             }
-
+            if (other.gameObject.CompareTag("EndDoor"))
+            {
+                //Popup-TODO
+                if (Input.GetKeyDown(KeyCode.E) && doorDelay)
+                {
+                    StartCoroutine(goInEndDoorAnimation(other));
+                }
+            }
             //For Peeking
             if (other.gameObject.CompareTag("PeekColliderLeft"))
             {
