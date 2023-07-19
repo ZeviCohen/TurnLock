@@ -123,32 +123,48 @@ public class PlayerController : MonoBehaviour
         Door door = other.gameObject.GetComponent<Door>();
         Door connectingDoor = door.connectingDoor.GetComponent<Door>();
         //Doors becomes open
+        other.GetComponent<MeshRenderer>().material = door.doorOpen;
+        door.connectingDoor.GetComponent<MeshRenderer>().material = door.doorOpen;
         //Player moves into door
+        playerAnim.SetTrigger("climb");
         yield return new WaitForSeconds(0.1f);
-        transform.Translate(Vector3.back);
+        transform.Translate(Vector3.forward);
         yield return new WaitForSeconds(0.1f);
-        transform.Translate(Vector3.back);
+        transform.Translate(Vector3.forward);
         yield return new WaitForSeconds(0.1f);
-        transform.Translate(Vector3.back);
+        transform.Translate(Vector3.forward);
         yield return new WaitForSeconds(0.1f);
+        transform.Translate(Vector3.forward);
+        yield return new WaitForSeconds(0.1f);
+        transform.Translate(Vector3.forward);
+        yield return new WaitForSeconds(0.1f);
+        //Turn player invisible
+        spriteRenderer.enabled = false;
         //Camera rotates
         Camera.GetComponent<Rotate>().rotate(connectingDoor.side, false);
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(2.5f);
         //Player teleports
+        playerAnim.SetTrigger("idle");
         transform.position = door.connectingDoor.transform.position;
         Vector3 angles = door.connectingDoor.transform.rotation.eulerAngles;
         Vector3 newAngles = new Vector3(angles.x, angles.y, transform.rotation.eulerAngles.z);
         Quaternion finishAngles = new Quaternion();
         finishAngles.eulerAngles = newAngles;
         transform.rotation = finishAngles;
+        // Player reappears
+        spriteRenderer.enabled = true;
         yield return new WaitForSeconds(2.0f);
         //Player moves out of door
-        transform.Translate(Vector3.forward);
+        transform.Translate(Vector3.back);
         yield return new WaitForSeconds(0.1f);
-        transform.Translate(Vector3.forward);
+        transform.Translate(Vector3.back);
         yield return new WaitForSeconds(0.1f);
-        transform.Translate(Vector3.forward);
+        transform.Translate(Vector3.back);
+        yield return new WaitForSeconds(0.1f);
+        transform.Translate(Vector3.back);
         //Close door
+        other.GetComponent<MeshRenderer>().material = door.doorClose;
+        door.connectingDoor.GetComponent<MeshRenderer>().material = door.doorClose;
         //Cooldown
         doorDelay = false;
         rotateAnimation = false;

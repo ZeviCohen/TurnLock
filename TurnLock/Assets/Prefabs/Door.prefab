@@ -129,3 +129,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   connectingDoor: {fileID: 0}
   side: 0
+  doorOpen: {fileID: 2100000, guid: d775a6181f53f47a9934804782862b90, type: 2}
+  doorClose: {fileID: 2100000, guid: 09f802a2081f44debbff3e511db730f7, type: 2}

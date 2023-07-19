@@ -10,6 +10,10 @@ public class Door : MonoBehaviour
     //To determine the rotation for player based on the side
     public float side;
 
+    //For the door open/close
+    public Material doorOpen;
+    public Material doorClose;
+
     // Start is called before the first frame update
     void Start()
     {
