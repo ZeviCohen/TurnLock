@@ -129,6 +129,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator goInDoorAnimation(Collider other)
     {
+        rb.velocity = Vector3.zero;
         rotateAnimation = true;
         Door door = other.gameObject.GetComponent<Door>();
         Door connectingDoor = door.connectingDoor.GetComponent<Door>();
