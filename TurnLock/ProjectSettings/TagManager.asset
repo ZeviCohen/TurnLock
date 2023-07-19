@@ -12,6 +12,7 @@ TagManager:
   - TopOfLadder
   - PeekColliderLeft
   - PeekColliderRight
+  - EndDoor
   layers:
   - Default
   - TransparentFX
