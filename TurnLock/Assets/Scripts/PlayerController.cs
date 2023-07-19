@@ -4,6 +4,18 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    //Player components
+    private Animator playerAnim;
+    private SpriteRenderer spriteRenderer;
+
+    //For Animation
+    private IDictionary<string, int> animationDictionary = new Dictionary<string,int>() {
+        { "idle", 0},
+        {"walk",0 },
+        {"run",0 },
+        {"climb",0 }
+    };
+
     //For player movement
     public float speed = 20f;
     private float horizontalInput;
@@ -21,8 +33,6 @@ public class PlayerController : MonoBehaviour
     public Box box = null;
     public float forceMagnitude = 5f;
 
-    //Animator
-    private Animator playerAnim;
 
     //For door
     private bool doorDelay = true;
@@ -38,8 +48,9 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         playerAnim = GetComponent<Animator>();
-        playerAnim.SetTrigger("");
         Physics.gravity *= 2;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.size = new Vector2(1f,1f);
     }
 
     private void Move()
@@ -48,10 +59,28 @@ public class PlayerController : MonoBehaviour
         if (!onLadder)
         {
             transform.Translate(Vector3.right * horizontalInput * speed * Time.deltaTime);
-        }
-        if (horizontalInput != 0)
-        {
-            Camera.GetComponent<Rotate>().peekBack();
+            if (horizontalInput != 0)
+            {
+                if (animationDictionary["walk"] == 0)
+                {
+                    playerAnim.SetTrigger("walk");
+                    resetAnimations("walk");
+                }
+                Camera.GetComponent<Rotate>().peekBack();
+            }
+            if (horizontalInput>-0.01f && horizontalInput<0.01f && animationDictionary["idle"]==0)
+            {
+                playerAnim.SetTrigger("idle");
+                resetAnimations("idle");
+            }
+            if (horizontalInput>0)
+            {
+                spriteRenderer.flipX = false;
+            }
+            else if (horizontalInput<0)
+            {
+                spriteRenderer.flipX = true;
+            }
         }
     }
 
@@ -60,6 +89,21 @@ public class PlayerController : MonoBehaviour
         transform.Translate(Vector3.right * Time.deltaTime * movingPlatform.speed * movingPlatform.direction);
     }
 
+    private void resetAnimations(string animation)
+    {
+        List<string> keys = new List<string>(animationDictionary.Keys);
+        foreach (string anim in keys)
+        {
+            if (anim!=animation) {
+                animationDictionary[anim] = 0;
+            }
+            else
+            {
+                animationDictionary[anim] = 1;
+            }
+
+        }
+    }
 
     IEnumerator goingDownReset()
     {
@@ -79,7 +123,6 @@ public class PlayerController : MonoBehaviour
         Door door = other.gameObject.GetComponent<Door>();
         Door connectingDoor = door.connectingDoor.GetComponent<Door>();
         //Doors becomes open
-
         //Player moves into door
         yield return new WaitForSeconds(0.1f);
         transform.Translate(Vector3.back);
@@ -161,6 +204,11 @@ public class PlayerController : MonoBehaviour
                         }
                         transform.Translate(Vector3.up * Time.deltaTime * ladderSpeed, Space.World);
                         gameObject.GetComponent<Rigidbody>().useGravity = false;
+                        if (animationDictionary["climb"] == 0)
+                        {
+                            playerAnim.SetTrigger("climb");
+                            resetAnimations("climb");
+                        }
                     }
                 }
                 else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
@@ -178,21 +226,30 @@ public class PlayerController : MonoBehaviour
                         }
                         transform.Translate(Vector3.down * Time.deltaTime * ladderSpeed, Space.World);
                         gameObject.GetComponent<Rigidbody>().useGravity = false;
+                        if (animationDictionary["climb"] == 0)
+                        {
+                            playerAnim.SetTrigger("climb");
+                            resetAnimations("climb");
+                        }
                     }
                     else
                     {
                         gameObject.GetComponent<Rigidbody>().useGravity = true;
                         onLadder = false;
+                        playerAnim.SetTrigger("idle");
+                        resetAnimations("idle");
+                        
                     }
                 }
 
                 ////Checks when the player is at the top of the ladder
-                if (transform.position.y >= other.gameObject.transform.position.y + (ladderLength / 2) && !goingDown)//TODO-Make the number fit pixels
+                if (transform.position.y >= other.gameObject.transform.position.y + (ladderLength / 2) && !goingDown)
                 {
                     transform.position = new Vector3(transform.position.x, other.transform.position.y + (ladderLength / 2) + 3, transform.position.z);
                     transform.Translate(Vector3.forward);
                     gameObject.GetComponent<Rigidbody>().useGravity = true;
                     onLadder = false;
+                    playerAnim.SetTrigger("idle");
                 }
             }
             //For top of ladder collision
@@ -206,6 +263,7 @@ public class PlayerController : MonoBehaviour
                     transform.Translate(Vector3.back * 10);
                     gameObject.GetComponent<Rigidbody>().useGravity = true;
                     onLadder = true;
+                    playerAnim.SetTrigger("climb");
                     if (transform.rotation.eulerAngles.y == 90 || transform.rotation.eulerAngles.y == 270)
                     {
                         transform.position = new Vector3(transform.position.x, transform.position.y, other.gameObject.transform.position.z);
