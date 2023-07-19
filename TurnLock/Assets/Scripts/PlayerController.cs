@@ -40,13 +40,11 @@ public class PlayerController : MonoBehaviour
     //For door
     private bool doorDelay = true;
     public bool rotateAnimation = false;
-    public bool hasKey = false;
+    public int keyCount = 0;
 
     //For camera
     public GameObject Camera;
     private bool peeking = false;
-
-    //Increases gravity
     
 
     // Start is called before the first frame update
@@ -356,19 +354,29 @@ public class PlayerController : MonoBehaviour
                     }
                     if (!other.gameObject.GetComponent<Door>().unlocked)
                     {
-                        if (hasKey)
+                        if (keyCount>0)
                         {
                             other.gameObject.GetComponent<Door>().unlocked = true;
                             if (other.gameObject.GetComponent<Door>().hasLock)
                             {
                                 Destroy(other.gameObject.GetComponent<Door>().Lock);
                             }
-                            hasKey = false;
+                            keyCount--;
                             StartCoroutine(goInDoorAnimation(other));
                         }
                     }
                 }
             }
+
+            //For Key Collision
+            if (other.gameObject.CompareTag("Key"))
+            {
+                keyCount++;
+                Destroy(other.gameObject);
+                //TODO- Make ui for key appear
+            }
+
+
             if (other.gameObject.CompareTag("EndDoor"))
             {
                 //Popup-TODO
