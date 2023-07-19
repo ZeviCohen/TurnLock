@@ -541,8 +541,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4287833716
-  m_fontColor: {r: 0.45581368, g: 0.14929691, b: 0.5754717, a: 1}
+    rgba: 4289200179
+  m_fontColor: {r: 0.19918303, g: 0, b: 0.6603774, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -733,7 +733,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skyWidth: 96
-  speed: 10
+  speed: 6
   offset: {x: 0, y: 0, z: 0}
 --- !u!4 &1359859471
 Transform:
