@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
 
     //For box
     public Box box = null;
+    public float forceMagnitude = 5f;
 
     //Animator
     private Animator playerAnim;
@@ -30,11 +31,15 @@ public class PlayerController : MonoBehaviour
     //For camera
     public GameObject Camera;
 
+    //Increases gravity
+    
+
     // Start is called before the first frame update
     void Start()
     {
         playerAnim = GetComponent<Animator>();
         playerAnim.SetTrigger("");
+        Physics.gravity *= 2;
     }
 
     private void Move()
@@ -42,7 +47,7 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");
         if (!onLadder)
         {
-            transform.Translate(Vector3.right * horizontalInput * speed * Time.deltaTime*-1);
+            transform.Translate(Vector3.right * horizontalInput * speed * Time.deltaTime);
         }
         if (horizontalInput != 0)
         {
@@ -55,13 +60,6 @@ public class PlayerController : MonoBehaviour
         transform.Translate(Vector3.right * Time.deltaTime * movingPlatform.speed * movingPlatform.direction);
     }
 
-    private void MoveBox(Vector3 vector)
-    {
-        //Change animation and update speed
-        speed = 10f;
-        //Move the box
-        box.Move(vector, speed);
-    }
 
     IEnumerator goingDownReset()
     {
@@ -84,25 +82,29 @@ public class PlayerController : MonoBehaviour
 
         //Player moves into door
         yield return new WaitForSeconds(0.1f);
-        transform.Translate(Vector3.forward);
+        transform.Translate(Vector3.back);
         yield return new WaitForSeconds(0.1f);
-        transform.Translate(Vector3.forward);
+        transform.Translate(Vector3.back);
         yield return new WaitForSeconds(0.1f);
-        transform.Translate(Vector3.forward);
+        transform.Translate(Vector3.back);
         yield return new WaitForSeconds(0.1f);
         //Camera rotates
         Camera.GetComponent<Rotate>().rotate(connectingDoor.side, false);
         yield return new WaitForSeconds(5.0f);
         //Player teleports
         transform.position = door.connectingDoor.transform.position;
-        transform.rotation = door.connectingDoor.transform.rotation;
+        Vector3 angles = door.connectingDoor.transform.rotation.eulerAngles;
+        Vector3 newAngles = new Vector3(angles.x, angles.y, transform.rotation.eulerAngles.z);
+        Quaternion finishAngles = new Quaternion();
+        finishAngles.eulerAngles = newAngles;
+        transform.rotation = finishAngles;
         yield return new WaitForSeconds(2.0f);
         //Player moves out of door
-        transform.Translate(Vector3.back);
+        transform.Translate(Vector3.forward);
         yield return new WaitForSeconds(0.1f);
-        transform.Translate(Vector3.back);
+        transform.Translate(Vector3.forward);
         yield return new WaitForSeconds(0.1f);
-        transform.Translate(Vector3.back);
+        transform.Translate(Vector3.forward);
         //Close door
         //Cooldown
         doorDelay = false;
@@ -110,28 +112,10 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(doorCooldown());
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
         if (!rotateAnimation)
         {
-            //For box collision
-            if (collision.gameObject.CompareTag("Box"))
-            {
-                box = collision.gameObject.GetComponent<Box>();
-                if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
-                {
-                    MoveBox(Vector3.left);
-                }
-                else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
-                {
-                    MoveBox(Vector3.right);
-                }
-            }
-            else
-            {
-                box = null;
-            }
-
             //For moving platform collision
             if (collision.gameObject.CompareTag("MovingPlatform"))
             {
@@ -264,6 +248,21 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        Rigidbody rigidbody = hit.collider.attachedRigidbody;
+
+        if (rigidbody != null)
+        {
+            Vector3 forceDirection = hit.gameObject.transform.position - transform.position;
+            forceDirection.y = 0;
+            forceDirection.Normalize();
+
+            rigidbody.AddForceAtPosition(forceDirection*forceMagnitude,transform.position,ForceMode.Impulse);
+        }
+    }
+
 
     // Update is called once per frame
     void Update()
