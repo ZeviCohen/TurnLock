@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
     //For door
     private bool doorDelay = true;
     public bool rotateAnimation = false;
+    public bool hasKey = false;
 
     //For camera
     public GameObject Camera;
@@ -349,7 +350,23 @@ public class PlayerController : MonoBehaviour
                 //Popup-TODO
                 if (Input.GetKeyDown(KeyCode.E) && doorDelay)
                 {
-                    StartCoroutine(goInDoorAnimation(other));
+                    if (other.gameObject.GetComponent<Door>().unlocked)
+                    {
+                        StartCoroutine(goInDoorAnimation(other));
+                    }
+                    if (!other.gameObject.GetComponent<Door>().unlocked)
+                    {
+                        if (hasKey)
+                        {
+                            other.gameObject.GetComponent<Door>().unlocked = true;
+                            if (other.gameObject.GetComponent<Door>().hasLock)
+                            {
+                                Destroy(other.gameObject.GetComponent<Door>().Lock);
+                            }
+                            hasKey = false;
+                            StartCoroutine(goInDoorAnimation(other));
+                        }
+                    }
                 }
             }
             if (other.gameObject.CompareTag("EndDoor"))
@@ -403,6 +420,10 @@ public class PlayerController : MonoBehaviour
         if (!rotateAnimation)
         {
             Move();
+        }
+        if (onLadder)
+        {
+            rb.velocity = Vector3.zero;
         }
     }
 }

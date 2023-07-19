@@ -14,10 +14,23 @@ public class Door : MonoBehaviour
     public Material doorOpen;
     public Material doorClose;
 
+    //For locked door
+    public bool unlocked = true;
+    public bool hasLock;
+    public GameObject Lock;
+
     // Start is called before the first frame update
     void Start()
     {
         
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Lock"))
+        {
+            unlocked = false;
+        }
     }
 
     // Update is called once per frame
