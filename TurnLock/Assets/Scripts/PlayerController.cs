@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     //Player components
     private Animator playerAnim;
     private SpriteRenderer spriteRenderer;
+    private Rigidbody rb;
 
     //For Animation
     private IDictionary<string, int> animationDictionary = new Dictionary<string,int>() {
@@ -19,6 +20,7 @@ public class PlayerController : MonoBehaviour
     //For player movement
     public float speed = 20f;
     private float horizontalInput;
+    public float velocityMax = 50f;
 
     //For ladder
     public bool onLadder;
@@ -30,7 +32,7 @@ public class PlayerController : MonoBehaviour
     public MovingPlatform movingPlatform = null;
 
     //For box
-    public Box box = null;
+    public GameObject box = null;
     public float forceMagnitude = 5f;
 
 
@@ -40,6 +42,7 @@ public class PlayerController : MonoBehaviour
 
     //For camera
     public GameObject Camera;
+    private bool peeking = false;
 
     //Increases gravity
     
@@ -51,14 +54,19 @@ public class PlayerController : MonoBehaviour
         Physics.gravity *= 2;
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.size = new Vector2(1f,1f);
+        rb = GetComponent<Rigidbody>();
     }
 
     private void Move()
     {
-        horizontalInput = Input.GetAxis("Horizontal");
+        horizontalInput = Input.GetAxisRaw("Horizontal");
         if (!onLadder)
         {
-            transform.Translate(Vector3.right * horizontalInput * speed * Time.deltaTime);
+            if(Mathf.Abs(rb.velocity.x) < velocityMax || Mathf.Abs(rb.velocity.z) < velocityMax)
+            {
+                print(rb.velocity);
+                rb.AddForce(Vector3.right * horizontalInput * speed);
+            }
             if (horizontalInput != 0)
             {
                 if (animationDictionary["walk"] == 0)
@@ -68,8 +76,9 @@ public class PlayerController : MonoBehaviour
                 }
                 Camera.GetComponent<Rotate>().peekBack();
             }
-            if (horizontalInput>-0.01f && horizontalInput<0.01f && animationDictionary["idle"]==0)
+            if (horizontalInput==0 && animationDictionary["idle"]==0)
             {
+                rb.velocity = Vector3.zero;
                 playerAnim.SetTrigger("idle");
                 resetAnimations("idle");
             }
@@ -191,6 +200,18 @@ public class PlayerController : MonoBehaviour
             {
                 onLadder = false;
             }
+
+            //For Box collision
+            if (collision.gameObject.CompareTag("Box")&& rb.velocity.x <1 && rb.velocity.z<1)
+            {
+                if (animationDictionary["run"] == 0)
+                {
+                    playerAnim.SetTrigger("run");
+                    resetAnimations("run");
+                }
+                box = collision.gameObject;
+                box.GetComponent<Rigidbody>().AddForce(new Vector3(box.transform.position.x-transform.position.x, 0, box.transform.position.z - transform.position.z)*20);//TODO
+            } 
         }
 
     }
@@ -307,17 +328,20 @@ public class PlayerController : MonoBehaviour
             //For Peeking
             if (other.gameObject.CompareTag("PeekColliderLeft"))
             {
-                if (Input.GetKeyDown(KeyCode.P))
+                if (Input.GetKeyDown(KeyCode.P)&&!peeking)
                 {
                     Camera.GetComponent<Rotate>().rotate(90, true);
+                    rotateAnimation = true;
+                    peeking = true;
                 }
             }
             if (other.gameObject.CompareTag("PeekColliderRight"))
             {
-                if (Input.GetKeyDown(KeyCode.P))
+                if (Input.GetKeyDown(KeyCode.P)&&!peeking)
                 {
                     Camera.GetComponent<Rotate>().rotate(-90, true);
                     rotateAnimation = true;
+                    peeking = true;
                 }
             }
         }
