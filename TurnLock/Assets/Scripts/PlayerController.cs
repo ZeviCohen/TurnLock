@@ -231,6 +231,11 @@ public class PlayerController : MonoBehaviour
             if (collision.gameObject.CompareTag("Ground"))
             {
                 onLadder = false;
+                if (animationDictionary["climb"] == 0)
+                {
+                    playerAnim.SetTrigger("climb");
+                    resetAnimations("climb");
+                }
             }
 
             //For Box collision
