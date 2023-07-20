@@ -24,6 +24,14 @@ public class Box : MonoBehaviour
         {
             transform.parent = collision.gameObject.GetComponent<Box>().platform;
         }
+        if (collision.gameObject.CompareTag("Player"))
+        {
+
+        }
+        else
+        {
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+        }
     }
 
     private void OnCollisionExit(Collision collision)

@@ -230,6 +230,8 @@ public class PlayerController : MonoBehaviour
         //Close door
         other.GetComponent<MeshRenderer>().material = door.doorClose;
         door.connectingDoor.GetComponent<MeshRenderer>().material = door.doorClose;
+        //Update spawnpoint
+        spawnPoint = transform.position;
         //Cooldown
         doorDelay = false;
         rotateAnimation = false;
@@ -289,7 +291,7 @@ public class PlayerController : MonoBehaviour
                     resetAnimations("run");
                 }
                 box = collision.gameObject;
-                box.GetComponent<Rigidbody>().AddForce(new Vector3(box.transform.position.x-transform.position.x, 0, box.transform.position.z - transform.position.z)*20,ForceMode.Impulse);//TODO
+                box.GetComponent<Rigidbody>().AddForce(new Vector3(box.transform.position.x-transform.position.x, 0, box.transform.position.z - transform.position.z));
             } 
         }
 

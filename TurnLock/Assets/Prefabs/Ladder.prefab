@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7752277150794206511}
   - component: {fileID: 8470629716930434617}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: LadderPart2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -143,6 +143,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8eb95f98320b40f98fd62c77994790b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sideLadder: 0
+  offLadder: 
 --- !u!1 &6110161774693627047
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,7 +203,7 @@ GameObject:
   - component: {fileID: 7754168674423704809}
   - component: {fileID: 5233511977453816708}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: LadderPart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
