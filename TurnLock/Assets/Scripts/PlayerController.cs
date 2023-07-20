@@ -99,22 +99,14 @@ public class PlayerController : MonoBehaviour
                 playerAnim.SetTrigger("idle");
                 resetAnimations("idle");
             }
-            //if (horizontalInput > 0)
-            //{
-            //    if (rb.velocity.x < 0 || rb.velocity.z < 0)
-            //    {
-            //        rb.velocity = Vector3.zero;
-            //    }
-            //    spriteRenderer.flipX = false;
-            //}
-            //else if (horizontalInput < 0)
-            //{
-            //    if (rb.velocity.x > 0 || rb.velocity.z > 0)
-            //    {
-            //        rb.velocity = Vector3.zero;
-            //    }
-            //    spriteRenderer.flipX = true;
-            //}
+            if (horizontalInput > 0)
+            {
+                spriteRenderer.flipX = false;
+            }
+            else if (horizontalInput < 0)
+            {
+                spriteRenderer.flipX = true;
+            }
             print("second: " + rb.velocity);
         }
     }
@@ -149,6 +141,11 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator spawnAnimation()
     {
+        rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+        yield return new WaitForSeconds(0.5f);
+        rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation;
+        yield return new WaitForSeconds(0.5f);
+        rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
         rotateAnimation = true;
         yield return new WaitForSeconds(1.0f);
         transform.Translate(Vector3.back);
@@ -159,6 +156,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         transform.Translate(Vector3.back);
         rotateAnimation = false;
+        spawnPoint = transform.position;
     }
 
     IEnumerator goInDoorAnimation(Collider other)
@@ -430,31 +428,35 @@ public class PlayerController : MonoBehaviour
             //For door collision
             if (other.gameObject.CompareTag("Door"))
             {
-                //Popup-TODO
-                if (Input.GetKeyDown(KeyCode.E) && doorDelay)
+                if (!other.gameObject.GetComponent<Door>().startingDoor)
                 {
-                    if (other.gameObject.GetComponent<Door>().unlocked)
+                    //Popup
+                    other.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+                    if (Input.GetKeyDown(KeyCode.E) && doorDelay)
                     {
-                        StartCoroutine(goInDoorAnimation(other));
-                    }
-                    if (!other.gameObject.GetComponent<Door>().unlocked)
-                    {
-                        if (keyCount>0)
+                        if (other.gameObject.GetComponent<Door>().unlocked)
                         {
-                            other.gameObject.GetComponent<Door>().unlocked = true;
-                            other.gameObject.GetComponent<Door>().connectingDoor.GetComponent<Door>().unlocked = true;
-                            if (other.gameObject.GetComponent<Door>().hasLock)
-                            {
-                                Destroy(other.gameObject.GetComponent<Door>().Lock);
-                                Destroy(other.gameObject.GetComponent<Door>().connectingDoor.GetComponent<Door>().Lock);
-                            }
-                            keyCount--;
-                            key.SetActive(false);
                             StartCoroutine(goInDoorAnimation(other));
                         }
-                        else
+                        if (!other.gameObject.GetComponent<Door>().unlocked)
                         {
-                            other.gameObject.GetComponent<Door>().LockedAnimation();
+                            if (keyCount > 0)
+                            {
+                                other.gameObject.GetComponent<Door>().unlocked = true;
+                                other.gameObject.GetComponent<Door>().connectingDoor.GetComponent<Door>().unlocked = true;
+                                if (other.gameObject.GetComponent<Door>().hasLock)
+                                {
+                                    Destroy(other.gameObject.GetComponent<Door>().Lock);
+                                    Destroy(other.gameObject.GetComponent<Door>().connectingDoor.GetComponent<Door>().Lock);
+                                }
+                                keyCount--;
+                                key.SetActive(false);
+                                StartCoroutine(goInDoorAnimation(other));
+                            }
+                            else
+                            {
+                                other.gameObject.GetComponent<Door>().LockedAnimation();
+                            }
                         }
                     }
                 }
@@ -500,9 +502,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Door"))
+        {
+            if (!other.gameObject.GetComponent<Door>().startingDoor)
+            {
+                //Popup
+                other.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+            }
+        }
+    }
+
     public void checkDeath()
     {
-        if (transform.position.y < -10)
+        if (transform.position.y < -45)
         {
             transform.position = spawnPoint;
             Camera.GetComponent<Rotate>().rotate(0, false);
