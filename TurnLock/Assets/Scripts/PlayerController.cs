@@ -62,13 +62,17 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         playerAnim = GetComponent<Animator>();
-        Physics.gravity *= 2;
+
+        //For gravity
+        Physics.gravity *= 5;
+
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.size = new Vector2(1f,1f);
+
         rb = GetComponent<Rigidbody>();
-        spawnPoint = transform.position;
         rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
-        print(rb.constraints);
+
+        spawnPoint = transform.position;
         StartCoroutine(spawnAnimation());
     }
 
