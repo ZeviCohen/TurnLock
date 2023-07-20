@@ -357,9 +357,11 @@ public class PlayerController : MonoBehaviour
                         if (keyCount>0)
                         {
                             other.gameObject.GetComponent<Door>().unlocked = true;
+                            other.gameObject.GetComponent<Door>().connectingDoor.GetComponent<Door>().unlocked = true;
                             if (other.gameObject.GetComponent<Door>().hasLock)
                             {
                                 Destroy(other.gameObject.GetComponent<Door>().Lock);
+                                Destroy(other.gameObject.GetComponent<Door>().connectingDoor.GetComponent<Door>().Lock);
                             }
                             keyCount--;
                             StartCoroutine(goInDoorAnimation(other));
