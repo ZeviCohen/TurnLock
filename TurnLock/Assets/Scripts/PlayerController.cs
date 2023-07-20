@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    //UI
+    public GameObject key;
+
     //Player spawn
     public Vector3 spawnPoint;
 
@@ -65,6 +69,7 @@ public class PlayerController : MonoBehaviour
         spawnPoint = transform.position;
         rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
         print(rb.constraints);
+        StartCoroutine(spawnAnimation());
     }
 
     private void Move()
@@ -140,6 +145,20 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(1.0f);
         doorDelay = true;
+    }
+
+    IEnumerator spawnAnimation()
+    {
+        rotateAnimation = true;
+        yield return new WaitForSeconds(1.0f);
+        transform.Translate(Vector3.back);
+        yield return new WaitForSeconds(0.1f);
+        transform.Translate(Vector3.back);
+        yield return new WaitForSeconds(0.1f);
+        transform.Translate(Vector3.back);
+        yield return new WaitForSeconds(0.1f);
+        transform.Translate(Vector3.back);
+        rotateAnimation = false;
     }
 
     IEnumerator goInDoorAnimation(Collider other)
@@ -339,11 +358,26 @@ public class PlayerController : MonoBehaviour
                     }
                 }
 
-                ////Checks when the player is at the top of the ladder
+                //Checks when the player is at the top of the ladder
                 if (transform.position.y >= other.gameObject.transform.position.y + (ladderLength / 2) && !goingDown)
                 {
                     transform.position = new Vector3(transform.position.x, other.transform.position.y + (ladderLength / 2) + 3, transform.position.z);
-                    transform.Translate(Vector3.forward);
+                    if (other.gameObject.transform.parent.GetComponent<Ladder>().sideLadder)
+                    {
+                        if (other.gameObject.transform.parent.GetComponent<Ladder>().offLadder =="left")
+                        {
+                            transform.Translate(Vector3.left);
+                        }
+                        else if (other.gameObject.transform.parent.GetComponent<Ladder>().offLadder == "right")
+                        {
+                            transform.Translate(Vector3.right);
+                        }
+
+                    }
+                    else
+                    {
+                        transform.Translate(Vector3.forward);
+                    }
                     gameObject.GetComponent<Rigidbody>().useGravity = true;
                     onLadder = false;
                     playerAnim.SetTrigger("idle");
@@ -357,7 +391,21 @@ public class PlayerController : MonoBehaviour
                 {
                     //Checks if the player is going up or down
                     goingDown = true;
-                    transform.Translate(Vector3.back * 10);
+                    if (other.gameObject.transform.parent.GetComponent<Ladder>().sideLadder)
+                    {
+                        if (other.gameObject.transform.parent.GetComponent<Ladder>().offLadder == "left")
+                        {
+                            transform.Translate(Vector3.right*10);
+                        }
+                        else if (other.gameObject.transform.parent.GetComponent<Ladder>().offLadder == "right")
+                        {
+                            transform.Translate(Vector3.left*10);
+                        }
+
+                    }
+                    else {
+                        transform.Translate(Vector3.back * 10);
+                    }
                     gameObject.GetComponent<Rigidbody>().useGravity = true;
                     onLadder = true;
                     playerAnim.SetTrigger("climb");
@@ -401,6 +449,7 @@ public class PlayerController : MonoBehaviour
                                 Destroy(other.gameObject.GetComponent<Door>().connectingDoor.GetComponent<Door>().Lock);
                             }
                             keyCount--;
+                            key.SetActive(false);
                             StartCoroutine(goInDoorAnimation(other));
                         }
                         else
@@ -415,6 +464,7 @@ public class PlayerController : MonoBehaviour
             if (other.gameObject.CompareTag("Key"))
             {
                 keyCount++;
+                key.SetActive(true);
                 Destroy(other.gameObject);
                 //TODO- Make ui for key appear
             }
@@ -455,6 +505,7 @@ public class PlayerController : MonoBehaviour
         if (transform.position.y < -10)
         {
             transform.position = spawnPoint;
+            Camera.GetComponent<Rotate>().rotate(0, false);
         }
     }
 
