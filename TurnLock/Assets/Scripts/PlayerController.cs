@@ -69,6 +69,7 @@ public class PlayerController : MonoBehaviour
         spawnPoint = transform.position;
         rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
         print(rb.constraints);
+        StartCoroutine(spawnAnimation());
     }
 
     private void Move()
@@ -140,6 +141,20 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(1.0f);
         doorDelay = true;
+    }
+
+    IEnumerator spawnAnimation()
+    {
+        rotateAnimation = true;
+        yield return new WaitForSeconds(1.0f);
+        transform.Translate(Vector3.back);
+        yield return new WaitForSeconds(0.1f);
+        transform.Translate(Vector3.back);
+        yield return new WaitForSeconds(0.1f);
+        transform.Translate(Vector3.back);
+        yield return new WaitForSeconds(0.1f);
+        transform.Translate(Vector3.back);
+        rotateAnimation = false;
     }
 
     IEnumerator goInDoorAnimation(Collider other)

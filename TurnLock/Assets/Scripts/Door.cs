@@ -21,9 +21,24 @@ public class Door : MonoBehaviour
     public float shakeSpeed = 0.1f;
     private float direction = 1;
 
+    //For spawn door
+    public bool startingDoor;
+
     // Start is called before the first frame update
     void Start()
     {
+        if (startingDoor)
+        {
+            StartCoroutine(startAnimation());
+        }
+    }
+
+    IEnumerator startAnimation()
+    {
+        yield return new WaitForSeconds(1.0f);
+        GetComponent<MeshRenderer>().material = doorOpen;
+        yield return new WaitForSeconds(0.3f);
+        GetComponent<MeshRenderer>().material = doorClose;
 
     }
 
