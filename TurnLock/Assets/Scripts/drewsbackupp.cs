@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
 
-public class PlayerController : MonoBehaviour
+public class PlayerControllerb : MonoBehaviour
 {
     //Player spawn
     public Vector3 spawnPoint;
@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
 
     //For Animation
-    private IDictionary<string, int> animationDictionary = new Dictionary<string,int>() {
+    private IDictionary<string, int> animationDictionary = new Dictionary<string, int>() {
         { "idle", 0},
         {"walk",0 },
         {"run",0 },
@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
     //For camera
     public GameObject Camera;
     private bool peeking = false;
-    
+
 
     // Start is called before the first frame update
     void Start()
@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
         playerAnim = GetComponent<Animator>();
         Physics.gravity *= 2;
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.size = new Vector2(1f,1f);
+        spriteRenderer.size = new Vector2(1f, 1f);
         rb = GetComponent<Rigidbody>();
         spawnPoint = transform.position;
         rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         if (!onLadder)
         {
-            if(Mathf.Abs(rb.velocity.x) < velocityMax && Mathf.Abs(rb.velocity.z) < velocityMax)
+            if (Mathf.Abs(rb.velocity.x) < velocityMax && Mathf.Abs(rb.velocity.z) < velocityMax)
             {
                 rb.AddForce(transform.right * horizontalInput * speed);
             }
@@ -85,17 +85,17 @@ public class PlayerController : MonoBehaviour
                 }
                 Camera.GetComponent<Rotate>().peekBack();
             }
-            if (horizontalInput==0 && animationDictionary["idle"]==0)
+            if (horizontalInput == 0 && animationDictionary["idle"] == 0)
             {
-                rb.velocity = new Vector3(0,rb.velocity.y,0);
+                rb.velocity = new Vector3(0, rb.velocity.y, 0);
                 playerAnim.SetTrigger("idle");
                 resetAnimations("idle");
             }
-            if (horizontalInput>0)
+            if (horizontalInput > 0)
             {
                 spriteRenderer.flipX = false;
             }
-            else if (horizontalInput<0)
+            else if (horizontalInput < 0)
             {
                 spriteRenderer.flipX = true;
             }
@@ -112,7 +112,8 @@ public class PlayerController : MonoBehaviour
         List<string> keys = new List<string>(animationDictionary.Keys);
         foreach (string anim in keys)
         {
-            if (anim!=animation) {
+            if (anim != animation)
+            {
                 animationDictionary[anim] = 0;
             }
             else
@@ -146,9 +147,9 @@ public class PlayerController : MonoBehaviour
         //Doors becomes open
         other.GetComponent<MeshRenderer>().material = door.doorOpen;
         door.connectingDoor.GetComponent<MeshRenderer>().material = door.doorOpen;
-        if(Math.Abs(startDoorSide-endDoorSide)==90|| Math.Abs(startDoorSide - endDoorSide) == 270)
+        if (Math.Abs(startDoorSide - endDoorSide) == 90 || Math.Abs(startDoorSide - endDoorSide) == 270)
         {
-            lockX= true;
+            lockX = true;
         }
         //Player moves into door
         playerAnim.SetTrigger("climb");
@@ -259,7 +260,7 @@ public class PlayerController : MonoBehaviour
             }
 
             //For Box collision
-            if (collision.gameObject.CompareTag("Box")&& rb.velocity.x <1 && rb.velocity.z<1)
+            if (collision.gameObject.CompareTag("Box") && rb.velocity.x < 1 && rb.velocity.z < 1)
             {
                 if (animationDictionary["run"] == 0)
                 {
@@ -267,8 +268,8 @@ public class PlayerController : MonoBehaviour
                     resetAnimations("run");
                 }
                 box = collision.gameObject;
-                box.GetComponent<Rigidbody>().AddForce(new Vector3(box.transform.position.x-transform.position.x, 0, box.transform.position.z - transform.position.z)*20,ForceMode.Impulse);//TODO
-            } 
+                box.GetComponent<Rigidbody>().AddForce(new Vector3(box.transform.position.x - transform.position.x, 0, box.transform.position.z - transform.position.z) * 20, ForceMode.Impulse);//TODO
+            }
         }
 
     }
@@ -331,7 +332,7 @@ public class PlayerController : MonoBehaviour
                         onLadder = false;
                         playerAnim.SetTrigger("idle");
                         resetAnimations("idle");
-                        
+
                     }
                 }
 
@@ -387,7 +388,7 @@ public class PlayerController : MonoBehaviour
                     }
                     if (!other.gameObject.GetComponent<Door>().unlocked)
                     {
-                        if (keyCount>0)
+                        if (keyCount > 0)
                         {
                             other.gameObject.GetComponent<Door>().unlocked = true;
                             other.gameObject.GetComponent<Door>().connectingDoor.GetComponent<Door>().unlocked = true;
@@ -423,7 +424,7 @@ public class PlayerController : MonoBehaviour
             //For Peeking
             if (other.gameObject.CompareTag("PeekColliderLeft"))
             {
-                if (Input.GetKeyDown(KeyCode.P)&&!peeking)
+                if (Input.GetKeyDown(KeyCode.P) && !peeking)
                 {
                     Camera.GetComponent<Rotate>().rotate(90, true);
                     rotateAnimation = true;
@@ -432,7 +433,7 @@ public class PlayerController : MonoBehaviour
             }
             if (other.gameObject.CompareTag("PeekColliderRight"))
             {
-                if (Input.GetKeyDown(KeyCode.P)&&!peeking)
+                if (Input.GetKeyDown(KeyCode.P) && !peeking)
                 {
                     Camera.GetComponent<Rotate>().rotate(-90, true);
                     rotateAnimation = true;

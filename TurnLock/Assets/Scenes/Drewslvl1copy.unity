@@ -3070,8 +3070,20 @@ PrefabInstance:
       value: ExtremelyLockedDoor
       objectReference: {fileID: 0}
     - target: {fileID: 1495636717853051218, guid: f0d958e1c341c40d8a1b2caf7caf0bb1, type: 3}
+      propertyPath: Lock
+      value: 
+      objectReference: {fileID: 1356212489}
+    - target: {fileID: 1495636717853051218, guid: f0d958e1c341c40d8a1b2caf7caf0bb1, type: 3}
       propertyPath: side
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1495636717853051218, guid: f0d958e1c341c40d8a1b2caf7caf0bb1, type: 3}
+      propertyPath: hasLock
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1495636717853051218, guid: f0d958e1c341c40d8a1b2caf7caf0bb1, type: 3}
+      propertyPath: unlocked
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1495636717853051218, guid: f0d958e1c341c40d8a1b2caf7caf0bb1, type: 3}
       propertyPath: connectingDoor
@@ -9962,9 +9974,17 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 9070729624943048313, guid: ca592f819f97f436a91dfb10d9664701, type: 3}
+      propertyPath: speed
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 9070729624943048313, guid: ca592f819f97f436a91dfb10d9664701, type: 3}
       propertyPath: Camera
       value: 
       objectReference: {fileID: 1278316342}
+    - target: {fileID: 9070729624943048313, guid: ca592f819f97f436a91dfb10d9664701, type: 3}
+      propertyPath: velocityMax
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 9070729624943048319, guid: ca592f819f97f436a91dfb10d9664701, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -10008,6 +10028,10 @@ PrefabInstance:
     - target: {fileID: 9070729624943048319, guid: ca592f819f97f436a91dfb10d9664701, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9070729624943048319, guid: ca592f819f97f436a91dfb10d9664701, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca592f819f97f436a91dfb10d9664701, type: 3}
@@ -12215,8 +12239,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3760549522649746807, guid: a9e8dd12fcbf7494c978da7214972b83, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 10.000001
+      objectReference: {fileID: 0}
+    - target: {fileID: 3760549522649746807, guid: a9e8dd12fcbf7494c978da7214972b83, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 20.000013
+      objectReference: {fileID: 0}
+    - target: {fileID: 3760549522649746807, guid: a9e8dd12fcbf7494c978da7214972b83, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.0000002
+      objectReference: {fileID: 0}
+    - target: {fileID: 3760549522649746807, guid: a9e8dd12fcbf7494c978da7214972b83, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 161.11
+      value: 161.11002
       objectReference: {fileID: 0}
     - target: {fileID: 3760549522649746807, guid: a9e8dd12fcbf7494c978da7214972b83, type: 3}
       propertyPath: m_LocalPosition.y
@@ -12236,7 +12272,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3760549522649746807, guid: a9e8dd12fcbf7494c978da7214972b83, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3760549522649746807, guid: a9e8dd12fcbf7494c978da7214972b83, type: 3}
       propertyPath: m_LocalRotation.z
@@ -14687,6 +14723,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1803616738}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1809871722 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9070729624943048319, guid: ca592f819f97f436a91dfb10d9664701, type: 3}
+  m_PrefabInstance: {fileID: 1204674703}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1826092660
 GameObject:
   m_ObjectHideFlags: 0
@@ -15021,6 +15062,10 @@ PrefabInstance:
       propertyPath: orthographic size
       value: 127.968765
       objectReference: {fileID: 0}
+    - target: {fileID: 4534858801789292597, guid: 74ead5bc0427344b987f1b69647fc0af, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 1809871722}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74ead5bc0427344b987f1b69647fc0af, type: 3}
 --- !u!1001 &1871662582
