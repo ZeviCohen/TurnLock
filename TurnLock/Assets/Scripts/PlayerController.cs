@@ -72,9 +72,12 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         if (!onLadder)
         {
+            print("first: " + rb.velocity);
             if(Mathf.Abs(rb.velocity.x) < velocityMax && Mathf.Abs(rb.velocity.z) < velocityMax)
             {
+                //rb.velocity = transform.right * horizontalInput * speed;
                 rb.AddForce(transform.right * horizontalInput * speed);
+                print(transform.right * horizontalInput * speed);
             }
             if (horizontalInput != 0)
             {
@@ -85,28 +88,29 @@ public class PlayerController : MonoBehaviour
                 }
                 Camera.GetComponent<Rotate>().peekBack();
             }
-            if (horizontalInput==0 && animationDictionary["idle"]==0)
+            if (horizontalInput == 0 && animationDictionary["idle"] == 0)
             {
-                rb.velocity = new Vector3(0,rb.velocity.y,0);
+                rb.velocity = new Vector3(0, rb.velocity.y, 0);
                 playerAnim.SetTrigger("idle");
                 resetAnimations("idle");
             }
-            if (horizontalInput>0)
-            {
-                if (rb.velocity.x<0||rb.velocity.z<0)
-                {
-                    rb.velocity = Vector3.zero;
-                }
-                spriteRenderer.flipX = false;
-            }
-            else if (horizontalInput<0)
-            {
-                if (rb.velocity.x > 0 || rb.velocity.z > 0)
-                {
-                    rb.velocity = Vector3.zero;
-                }
-                spriteRenderer.flipX = true;
-            }
+            //if (horizontalInput > 0)
+            //{
+            //    if (rb.velocity.x < 0 || rb.velocity.z < 0)
+            //    {
+            //        rb.velocity = Vector3.zero;
+            //    }
+            //    spriteRenderer.flipX = false;
+            //}
+            //else if (horizontalInput < 0)
+            //{
+            //    if (rb.velocity.x > 0 || rb.velocity.z > 0)
+            //    {
+            //        rb.velocity = Vector3.zero;
+            //    }
+            //    spriteRenderer.flipX = true;
+            //}
+            print("second: " + rb.velocity);
         }
     }
 
@@ -151,7 +155,7 @@ public class PlayerController : MonoBehaviour
         door.connectingDoor.GetComponent<MeshRenderer>().material = door.doorOpen;
         if(Math.Abs(startDoorSide-endDoorSide)==90|| Math.Abs(startDoorSide - endDoorSide) == 270)
         {
-            lockX= true;
+            lockX= !lockX;
         }
         //Player moves into door
         playerAnim.SetTrigger("climb");
@@ -193,9 +197,17 @@ public class PlayerController : MonoBehaviour
         if (lockX)
         {
             rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation;
+            yield return new WaitForSeconds(0.5f);
+            rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+            yield return new WaitForSeconds(0.5f);
+            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation;
         }
         else
         {
+            rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+            yield return new WaitForSeconds(0.5f);
+            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation;
+            yield return new WaitForSeconds(0.5f);
             rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
         }
         //Close door
@@ -353,13 +365,13 @@ public class PlayerController : MonoBehaviour
                     {
                         rb.constraints = RigidbodyConstraints.FreezeRotation;
                         transform.position = new Vector3(transform.position.x, transform.position.y, other.gameObject.transform.position.z);
-                        rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+                        rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation;
                     }
                     else
                     {
                         rb.constraints = RigidbodyConstraints.FreezeRotation;
                         transform.position = new Vector3(other.gameObject.transform.position.x, transform.position.y, transform.position.z);
-                        rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation;
+                        rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
                     }
 
                     StartCoroutine(goingDownReset());
