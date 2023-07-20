@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    //UI
+    public GameObject key;
+
     //Player spawn
     public Vector3 spawnPoint;
 
@@ -418,6 +422,7 @@ public class PlayerController : MonoBehaviour
                                 Destroy(other.gameObject.GetComponent<Door>().connectingDoor.GetComponent<Door>().Lock);
                             }
                             keyCount--;
+                            key.SetActive(false);
                             StartCoroutine(goInDoorAnimation(other));
                         }
                         else
@@ -432,6 +437,7 @@ public class PlayerController : MonoBehaviour
             if (other.gameObject.CompareTag("Key"))
             {
                 keyCount++;
+                key.SetActive(true);
                 Destroy(other.gameObject);
                 //TODO- Make ui for key appear
             }
