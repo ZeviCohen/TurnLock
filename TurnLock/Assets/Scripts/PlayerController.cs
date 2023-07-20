@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    //Player spawn
+    public Vector3 spawnPoint;
+
     //Player components
     private Animator playerAnim;
     private SpriteRenderer spriteRenderer;
@@ -55,6 +58,7 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.size = new Vector2(1f,1f);
         rb = GetComponent<Rigidbody>();
+        spawnPoint = transform.position;
     }
 
     private void Move()
@@ -78,7 +82,7 @@ public class PlayerController : MonoBehaviour
             }
             if (horizontalInput==0 && animationDictionary["idle"]==0)
             {
-                rb.velocity = Vector3.zero;
+                rb.velocity = new Vector3(0,rb.velocity.y,0);
                 playerAnim.SetTrigger("idle");
                 resetAnimations("idle");
             }
@@ -228,6 +232,11 @@ public class PlayerController : MonoBehaviour
             if (collision.gameObject.CompareTag("Ground"))
             {
                 onLadder = false;
+                if (animationDictionary["climb"] == 0)
+                {
+                    playerAnim.SetTrigger("climb");
+                    resetAnimations("climb");
+                }
             }
 
             //For Box collision
@@ -239,7 +248,7 @@ public class PlayerController : MonoBehaviour
                     resetAnimations("run");
                 }
                 box = collision.gameObject;
-                box.GetComponent<Rigidbody>().AddForce(new Vector3(box.transform.position.x-transform.position.x, 0, box.transform.position.z - transform.position.z)*20);//TODO
+                box.GetComponent<Rigidbody>().AddForce(new Vector3(box.transform.position.x-transform.position.x, 0, box.transform.position.z - transform.position.z)*20,ForceMode.Impulse);//TODO
             } 
         }
 
@@ -410,17 +419,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnControllerColliderHit(ControllerColliderHit hit)
+    public void checkDeath()
     {
-        Rigidbody rigidbody = hit.collider.attachedRigidbody;
-
-        if (rigidbody != null)
+        if (transform.position.y < -10)
         {
-            Vector3 forceDirection = hit.gameObject.transform.position - transform.position;
-            forceDirection.y = 0;
-            forceDirection.Normalize();
-
-            rigidbody.AddForceAtPosition(forceDirection*forceMagnitude,transform.position,ForceMode.Impulse);
+            transform.position = spawnPoint;
         }
     }
 
@@ -435,6 +438,16 @@ public class PlayerController : MonoBehaviour
         if (onLadder)
         {
             rb.velocity = Vector3.zero;
+        }
+        checkDeath();
+    }
+
+    //For camera follow
+    private void LateUpdate()
+    {
+        if (!rotateAnimation)
+        {
+            Camera.GetComponent<FollowPlayer>().follow();
         }
     }
 }

@@ -20,6 +20,7 @@ public class Rotate : MonoBehaviour
 
     public void rotate(float side, bool peek)
     {
+        transform.position = new Vector3(0,0,0);
         if (peek)
         {
             if(currentSide == 0 && side == -90)

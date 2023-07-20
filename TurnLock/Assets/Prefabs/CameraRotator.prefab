@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4087585211224535863}
   - component: {fileID: 4087585211224535856}
+  - component: {fileID: 4534858801789292597}
   m_Layer: 0
   m_Name: CameraRotator
   m_TagString: Untagged
@@ -46,6 +47,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnSpeed: 0.01
+--- !u!114 &4534858801789292597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4087585211224535857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c58cf69f68bd443ea4f4a224d11783e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4087585211590478213
 GameObject:
   m_ObjectHideFlags: 0
