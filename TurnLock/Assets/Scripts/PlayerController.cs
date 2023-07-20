@@ -62,7 +62,8 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         if (!onLadder)
         {
-            if(Mathf.Abs(rb.velocity.x) < velocityMax || Mathf.Abs(rb.velocity.z) < velocityMax)
+            print(horizontalInput + " " + rb.velocity.x + " " + rb.velocity.z);
+            if(Mathf.Abs(rb.velocity.x) < velocityMax && Mathf.Abs(rb.velocity.z) < velocityMax)
             {
                 rb.AddForce(transform.right * horizontalInput * speed);
             }
