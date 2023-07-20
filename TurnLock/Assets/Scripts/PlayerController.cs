@@ -179,14 +179,6 @@ public class PlayerController : MonoBehaviour
         Quaternion finishAngles = new Quaternion();
         finishAngles.eulerAngles = newAngles;
         transform.rotation = finishAngles;
-        if (lockX)
-        {
-            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation;
-        }
-        else
-        {
-            rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
-        }
         // Player reappears
         spriteRenderer.enabled = true;
         yield return new WaitForSeconds(2.0f);
@@ -198,6 +190,14 @@ public class PlayerController : MonoBehaviour
         transform.Translate(Vector3.back);
         yield return new WaitForSeconds(0.1f);
         transform.Translate(Vector3.back);
+        if (lockX)
+        {
+            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation;
+        }
+        else
+        {
+            rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+        }
         //Close door
         other.GetComponent<MeshRenderer>().material = door.doorClose;
         door.connectingDoor.GetComponent<MeshRenderer>().material = door.doorClose;
@@ -243,10 +243,10 @@ public class PlayerController : MonoBehaviour
             if (collision.gameObject.CompareTag("Ground"))
             {
                 onLadder = false;
-                if (animationDictionary["climb"] == 0)
+                if (animationDictionary["idle"] == 0 && animationDictionary["walk"]==0)
                 {
-                    playerAnim.SetTrigger("climb");
-                    resetAnimations("climb");
+                    playerAnim.SetTrigger("idle");
+                    resetAnimations("idle");
                 }
             }
 
@@ -390,6 +390,10 @@ public class PlayerController : MonoBehaviour
                             }
                             keyCount--;
                             StartCoroutine(goInDoorAnimation(other));
+                        }
+                        else
+                        {
+                            other.gameObject.GetComponent<Door>().LockedAnimation();
                         }
                     }
                 }
