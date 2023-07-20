@@ -502,7 +502,7 @@ public class PlayerController : MonoBehaviour
 
     public void checkDeath()
     {
-        if (transform.position.y < -10)
+        if (transform.position.y < -45)
         {
             transform.position = spawnPoint;
             Camera.GetComponent<Rotate>().rotate(0, false);
