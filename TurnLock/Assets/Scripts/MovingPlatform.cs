@@ -38,7 +38,7 @@ public class MovingPlatform : MonoBehaviour
         {
             collision.gameObject.transform.parent = transform;
             collision.gameObject.tag = "BoxOnPlatform";
-            collision.gameObject.GetComponent<Box>().platform = gameObject;
+            collision.gameObject.GetComponent<Box>().platform = transform;
         }
     }
 

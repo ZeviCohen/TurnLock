@@ -5,7 +5,7 @@ using UnityEngine;
 public class Box : MonoBehaviour
 {
     public Vector3 spawnPoint;
-    public GameObject platform = null;
+    public Transform platform = null;
 
     // Start is called before the first frame update
     void Start()
