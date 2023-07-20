@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FixPlayerXValue : MonoBehaviour
 {
+    public float newXVal = -138;
     // Start is called before the first frame update
     void Start()
     {
@@ -12,9 +13,7 @@ public class FixPlayerXValue : MonoBehaviour
 
     void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
-            while (other.transform.position.x == 2) {
-
-            }
+            other.transform.position = new Vector3(newXVal, other.transform.position.y, other.transform.position.z);
         }
     }
 
