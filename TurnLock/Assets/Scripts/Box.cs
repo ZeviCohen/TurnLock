@@ -5,6 +5,8 @@ using UnityEngine;
 public class Box : MonoBehaviour
 {
     public Vector3 spawnPoint;
+    public GameObject platform = null;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,6 +16,22 @@ public class Box : MonoBehaviour
     public void Move(Vector3 vector, float speed)
     {
         transform.Translate(vector * speed * Time.deltaTime);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("BoxOnPlatform"))
+        {
+            transform.parent = collision.gameObject.GetComponent<Box>().platform;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("BoxOnPlatform"))
+        {
+            transform.parent = null;
+        }
     }
 
     // Update is called once per frame
