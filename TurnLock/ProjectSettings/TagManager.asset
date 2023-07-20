@@ -16,6 +16,7 @@ TagManager:
   - Lock
   - IslandTag
   - Key
+  - BoxOnPlatform
   layers:
   - Default
   - TransparentFX
