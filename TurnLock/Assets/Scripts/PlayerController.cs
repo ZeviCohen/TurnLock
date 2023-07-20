@@ -93,18 +93,21 @@ public class PlayerController : MonoBehaviour
             }
             if (horizontalInput>0)
             {
+                if (rb.velocity.x<0||rb.velocity.z<0)
+                {
+                    rb.velocity = Vector3.zero;
+                }
                 spriteRenderer.flipX = false;
             }
             else if (horizontalInput<0)
             {
+                if (rb.velocity.x > 0 || rb.velocity.z > 0)
+                {
+                    rb.velocity = Vector3.zero;
+                }
                 spriteRenderer.flipX = true;
             }
         }
-    }
-
-    private void MoveWithPlatform()
-    {
-        transform.Translate(Vector3.right * Time.deltaTime * movingPlatform.speed * movingPlatform.direction);
     }
 
     private void resetAnimations(string animation)
@@ -236,17 +239,6 @@ public class PlayerController : MonoBehaviour
     {
         if (!rotateAnimation)
         {
-            //For moving platform collision
-            if (collision.gameObject.CompareTag("MovingPlatform"))
-            {
-                movingPlatform = collision.gameObject.GetComponent<MovingPlatform>();
-                MoveWithPlatform();
-            }
-            else
-            {
-                movingPlatform = null;
-            }
-
             //For ground collision
             if (collision.gameObject.CompareTag("Ground"))
             {

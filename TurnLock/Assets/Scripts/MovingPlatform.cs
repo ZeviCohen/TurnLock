@@ -26,10 +26,33 @@ public class MovingPlatform : MonoBehaviour
         {
             if (allowChange)
             {
-                print("hi");
                 direction *= -1;
                 StartCoroutine(change());
             }
+        }
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            collision.gameObject.transform.parent = transform;
+        }
+        if (collision.gameObject.CompareTag("Box"))
+        {
+            collision.gameObject.transform.parent = transform;
+            collision.gameObject.tag = "BoxOnPlatform";
+            collision.gameObject.GetComponent<Box>().platform = transform;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            collision.gameObject.transform.parent = null;
+        }
+        if (collision.gameObject.CompareTag("Box"))
+        {
+            collision.gameObject.transform.parent = null;
+            collision.gameObject.tag = "Box";
+            collision.gameObject.GetComponent<Box>().platform = null;
         }
     }
 
