@@ -235,6 +235,7 @@ public class PlayerController : MonoBehaviour
         rotateAnimation = false;
         StartCoroutine(doorCooldown());
     }
+
     IEnumerator goInEndDoorAnimation(Collider other)
     {
         rotateAnimation = true;
@@ -474,7 +475,8 @@ public class PlayerController : MonoBehaviour
 
             if (other.gameObject.CompareTag("EndDoor"))
             {
-                //Popup-TODO
+                //Popup
+                other.gameObject.transform.GetChild(0).gameObject.SetActive(true);
                 if (Input.GetKeyDown(KeyCode.E) && doorDelay)
                 {
                     StartCoroutine(goInEndDoorAnimation(other));
@@ -512,6 +514,13 @@ public class PlayerController : MonoBehaviour
                 other.gameObject.transform.GetChild(0).gameObject.SetActive(false);
             }
         }
+        else if (other.gameObject.CompareTag("EndDoor"))
+        {
+            //Popup
+            other.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        }
+
+
     }
 
     public void checkDeath()
