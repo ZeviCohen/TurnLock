@@ -19,6 +19,7 @@ public class BoxOutline : MonoBehaviour
             if (other.gameObject.transform.position.x<transform.position.x+3 && other.gameObject.transform.position.z < transform.position.z + 3 && other.gameObject.transform.position.x > transform.position.x - 3 && other.gameObject.transform.position.z > transform.position.z - 3 && other.gameObject.transform.position.y < transform.position.y + 3 && other.gameObject.transform.position.y < transform.position.y - 3)
             {
                 reward.SetActive(true);
+                Destroy(gameObject);
             }
         }
     }
