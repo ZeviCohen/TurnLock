@@ -533,7 +533,6 @@ public class PlayerController : MonoBehaviour
         if (transform.position.y < -45)
         {
             transform.position = spawnPoint;
-            Camera.GetComponent<Rotate>().rotate(0, false);
         }
     }
 
