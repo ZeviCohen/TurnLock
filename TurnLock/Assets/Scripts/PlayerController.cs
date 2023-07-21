@@ -286,7 +286,7 @@ public class PlayerController : MonoBehaviour
             //For ground collision
             if (collision.gameObject.CompareTag("Ground"))
             {
-                onLadder = false;
+                // onLadder = false;
                 if (animationDictionary["idle"] == 0 && animationDictionary["walk"]==0)
                 {
                     playerAnim.SetTrigger("idle");
