@@ -181,7 +181,7 @@ public class PlayerController : MonoBehaviour
         endDoorSide = connectingDoor.side;
         //Doors becomes open
         other.GetComponent<MeshRenderer>().material = door.doorOpen;
-        door.connectingDoor.GetComponent<MeshRenderer>().material = door.doorOpen;
+        connectingDoor.GetComponent<MeshRenderer>().material = connectingDoor.doorOpen;
         if(Math.Abs(startDoorSide-endDoorSide)==90|| Math.Abs(startDoorSide - endDoorSide) == 270)
         {
             lockX= !lockX;
@@ -240,7 +240,7 @@ public class PlayerController : MonoBehaviour
         }
         //Close door
         other.GetComponent<MeshRenderer>().material = door.doorClose;
-        door.connectingDoor.GetComponent<MeshRenderer>().material = door.doorClose;
+        connectingDoor.GetComponent<MeshRenderer>().material = connectingDoor.doorClose;
         //Update spawnpoint
         spawnPoint = transform.position;
         //Cooldown
@@ -584,6 +584,10 @@ public class PlayerController : MonoBehaviour
         if (onLadder)
         {
             rb.velocity = Vector3.zero;
+        }
+        else
+        {
+            rb.useGravity = true;
         }
         checkDeath();
     }
