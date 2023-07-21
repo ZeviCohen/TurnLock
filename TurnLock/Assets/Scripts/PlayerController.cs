@@ -489,6 +489,8 @@ public class PlayerController : MonoBehaviour
             //For Peeking
             if (other.gameObject.CompareTag("PeekColliderLeft"))
             {
+                //Popup
+                other.gameObject.transform.GetChild(0).gameObject.SetActive(true);
                 if (Input.GetKeyDown(KeyCode.P)&&!peeking)
                 {
                     Camera.GetComponent<Rotate>().rotate(90, true);
@@ -498,6 +500,8 @@ public class PlayerController : MonoBehaviour
             }
             if (other.gameObject.CompareTag("PeekColliderRight"))
             {
+                //Popup
+                other.gameObject.transform.GetChild(0).gameObject.SetActive(true);
                 if (Input.GetKeyDown(KeyCode.P)&&!peeking)
                 {
                     Camera.GetComponent<Rotate>().rotate(-90, true);
@@ -518,7 +522,20 @@ public class PlayerController : MonoBehaviour
                 other.gameObject.transform.GetChild(0).gameObject.SetActive(false);
             }
         }
-        else if (other.gameObject.CompareTag("EndDoor"))
+
+        if (other.gameObject.CompareTag("EndDoor"))
+        {
+            //Popup
+            other.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        }
+
+        if (other.gameObject.CompareTag("PeekColliderLeft"))
+        {
+            //Popup
+            other.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        }
+
+        if (other.gameObject.CompareTag("PeekColliderRight"))
         {
             //Popup
             other.gameObject.transform.GetChild(0).gameObject.SetActive(false);
