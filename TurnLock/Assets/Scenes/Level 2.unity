@@ -3653,7 +3653,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Key
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 919761315023281471, guid: b6b031b12f3c841d0b36a03563212e4b, type: 3}
+      propertyPath: spawnY
+      value: -13
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 919761315023281471, guid: b6b031b12f3c841d0b36a03563212e4b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b6b031b12f3c841d0b36a03563212e4b, type: 3}
 --- !u!4 &323972022 stripped
 Transform:
