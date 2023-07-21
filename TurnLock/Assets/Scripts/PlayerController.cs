@@ -81,7 +81,6 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         if (!onLadder)
         {
-            print("first: " + rb.velocity);
             if(Mathf.Abs(rb.velocity.x) < velocityMax && Mathf.Abs(rb.velocity.z) < velocityMax)
             {
                 //rb.velocity = transform.right * horizontalInput * speed;
@@ -96,6 +95,7 @@ public class PlayerController : MonoBehaviour
                     resetAnimations("walk");
                 }
                 Camera.GetComponent<Rotate>().peekBack();
+                peeking = false;
             }
             if (horizontalInput == 0 && animationDictionary["idle"] == 0)
             {
@@ -111,7 +111,6 @@ public class PlayerController : MonoBehaviour
             {
                 spriteRenderer.flipX = true;
             }
-            print("second: " + rb.velocity);
         }
     }
 
@@ -151,7 +150,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
         rotateAnimation = true;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.0f);
         transform.Translate(Vector3.back);
         yield return new WaitForSeconds(0.1f);
         transform.Translate(Vector3.back);
@@ -554,7 +553,7 @@ public class PlayerController : MonoBehaviour
     //For camera follow
     private void LateUpdate()
     {
-        if (!rotateAnimation)
+        if (!rotateAnimation&&!peeking)
         {
             Camera.GetComponent<FollowPlayer>().follow();
         }
