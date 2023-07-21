@@ -33,12 +33,15 @@ public class MovingPlatform : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             collision.gameObject.transform.parent = transform;
+            collision.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            print(collision.gameObject.GetComponent<Rigidbody>().velocity);
         }
         if (collision.gameObject.CompareTag("Box"))
         {
             collision.gameObject.transform.parent = transform;
             collision.gameObject.tag = "BoxOnPlatform";
             collision.gameObject.GetComponent<Box>().platform = transform;
+            collision.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
     }
 
