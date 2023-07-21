@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Tutorial.unity
     guid: 139796e1f80644deeabc44320569a0f1
   - enabled: 1
-    path: Assets/Scenes/Level2Noah.unity
-    guid: 5231c12be77894321818c38c3d769676
+    path: Assets/Scenes/Level 1.unity
+    guid: 788e913f9dadc492cb0a0f464337c182
+  - enabled: 1
+    path: Assets/Scenes/Level 2.unity
+    guid: 2ecab10def11e40f09df9e3026a869a5
   m_configObjects: {}
