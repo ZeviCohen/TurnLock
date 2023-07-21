@@ -22,10 +22,12 @@ public class Box : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("BoxOnPlatform"))
         {
-            transform.parent = collision.gameObject.GetComponent<Box>().platform;
+            transform.parent = collision.gameObject.transform;
         }
-        if (collision.gameObject.CompareTag("Player"))
-        {
+        if (collision.gameObject.CompareTag("Player")) {
+            if (gameObject.CompareTag("BoxOnPlatform")) {
+                collision.transform.parent = platform;
+            }
 
         }
         else
@@ -39,6 +41,9 @@ public class Box : MonoBehaviour
         if (collision.gameObject.CompareTag("BoxOnPlatform"))
         {
             transform.parent = null;
+        }
+        if (collision.gameObject.CompareTag("Player")) {
+            collision.gameObject.transform.parent = null;
         }
     }
 
