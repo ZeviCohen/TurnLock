@@ -56,6 +56,9 @@ public class PlayerController : MonoBehaviour
     //For camera
     public GameObject Camera;
     private bool peeking = false;
+
+    //For gravity
+    public float gravityMultiplier = 30f;
     
 
     // Start is called before the first frame update
@@ -64,7 +67,9 @@ public class PlayerController : MonoBehaviour
         playerAnim = GetComponent<Animator>();
 
         //For gravity
-        Physics.gravity *= 5;
+        print(Physics.gravity);
+        Physics.gravity *= gravityMultiplier;
+        print(Physics.gravity);
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.size = new Vector2(1f,1f);
@@ -85,7 +90,7 @@ public class PlayerController : MonoBehaviour
             {
                 //rb.velocity = transform.right * horizontalInput * speed;
                 rb.AddForce(transform.right * horizontalInput * speed);
-                print(transform.right * horizontalInput * speed);
+                // print(transform.right * horizontalInput * speed);
             }
             if (horizontalInput != 0)
             {
