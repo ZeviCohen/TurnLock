@@ -6,11 +6,13 @@ public class Box : MonoBehaviour
 {
     public Vector3 spawnPoint;
     public Transform platform = null;
+    private Rigidbody rb;
 
     // Start is called before the first frame update
     void Start()
     {
         spawnPoint = transform.position;
+        rb = GetComponent<Rigidbody>();
     }
 
     public void Move(Vector3 vector, float speed)
@@ -36,6 +38,17 @@ public class Box : MonoBehaviour
         }
     }
 
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            if (rb.velocity.x<0.1 && rb.velocity.z < 0.1)
+            {
+                rb.AddForce(new Vector3(transform.position.x-collision.gameObject.transform.position.x, 0 , transform.position.z - collision.gameObject.transform.position.z));
+            }
+
+        }
+    }
     private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("BoxOnPlatform"))
@@ -47,12 +60,18 @@ public class Box : MonoBehaviour
         }
     }
 
+    IEnumerator respawn()
+    {
+        yield return new WaitForSeconds(1.0f);
+        transform.position = spawnPoint;
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (transform.position.y < -10)
         {
-            transform.position = spawnPoint;
+            StartCoroutine(respawn());
         }
     }
 }
