@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     private Animator playerAnim;
     private SpriteRenderer spriteRenderer;
     private Rigidbody rb;
+    public ParticleSystem dirtParticle;
 
     //For Animation
     private IDictionary<string, int> animationDictionary = new Dictionary<string,int>() {
@@ -56,6 +57,9 @@ public class PlayerController : MonoBehaviour
     //For camera
     public GameObject Camera;
     private bool peeking = false;
+
+    //For gravity
+    public float gravityMultiplier = 30f;
     
 
     // Start is called before the first frame update
@@ -64,7 +68,9 @@ public class PlayerController : MonoBehaviour
         playerAnim = GetComponent<Animator>();
 
         //For gravity
-        Physics.gravity *= 5;
+        print(Physics.gravity);
+        Physics.gravity *= gravityMultiplier;
+        print(Physics.gravity);
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.size = new Vector2(1f,1f);
@@ -81,12 +87,11 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         if (!onLadder)
         {
-            print("first: " + rb.velocity);
             if(Mathf.Abs(rb.velocity.x) < velocityMax && Mathf.Abs(rb.velocity.z) < velocityMax)
             {
                 //rb.velocity = transform.right * horizontalInput * speed;
                 rb.AddForce(transform.right * horizontalInput * speed);
-                print(transform.right * horizontalInput * speed);
+                // print(transform.right * horizontalInput * speed);
             }
             if (horizontalInput != 0)
             {
@@ -96,12 +101,15 @@ public class PlayerController : MonoBehaviour
                     resetAnimations("walk");
                 }
                 Camera.GetComponent<Rotate>().peekBack();
+                peeking = false;
+                dirtParticle.Play();
             }
             if (horizontalInput == 0 && animationDictionary["idle"] == 0)
             {
                 rb.velocity = new Vector3(0, rb.velocity.y, 0);
                 playerAnim.SetTrigger("idle");
                 resetAnimations("idle");
+                dirtParticle.Stop();
             }
             if (horizontalInput > 0)
             {
@@ -111,7 +119,6 @@ public class PlayerController : MonoBehaviour
             {
                 spriteRenderer.flipX = true;
             }
-            print("second: " + rb.velocity);
         }
     }
 
@@ -195,7 +202,7 @@ public class PlayerController : MonoBehaviour
         spriteRenderer.enabled = false;
         //Camera rotates
         Camera.GetComponent<Rotate>().rotate(connectingDoor.side, false);
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(2f);
         //Player teleports
         playerAnim.SetTrigger("idle");
         transform.position = door.connectingDoor.transform.position;
@@ -206,7 +213,6 @@ public class PlayerController : MonoBehaviour
         transform.rotation = finishAngles;
         // Player reappears
         spriteRenderer.enabled = true;
-        yield return new WaitForSeconds(2.0f);
         //Player moves out of door
         transform.Translate(Vector3.back);
         yield return new WaitForSeconds(0.1f);
@@ -491,6 +497,8 @@ public class PlayerController : MonoBehaviour
             //For Peeking
             if (other.gameObject.CompareTag("PeekColliderLeft"))
             {
+                //Popup
+                other.gameObject.transform.GetChild(0).gameObject.SetActive(true);
                 if (Input.GetKeyDown(KeyCode.P)&&!peeking)
                 {
                     Camera.GetComponent<Rotate>().rotate(90, true);
@@ -500,6 +508,8 @@ public class PlayerController : MonoBehaviour
             }
             if (other.gameObject.CompareTag("PeekColliderRight"))
             {
+                //Popup
+                other.gameObject.transform.GetChild(0).gameObject.SetActive(true);
                 if (Input.GetKeyDown(KeyCode.P)&&!peeking)
                 {
                     Camera.GetComponent<Rotate>().rotate(-90, true);
@@ -520,7 +530,20 @@ public class PlayerController : MonoBehaviour
                 other.gameObject.transform.GetChild(0).gameObject.SetActive(false);
             }
         }
-        else if (other.gameObject.CompareTag("EndDoor"))
+
+        if (other.gameObject.CompareTag("EndDoor"))
+        {
+            //Popup
+            other.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        }
+
+        if (other.gameObject.CompareTag("PeekColliderLeft"))
+        {
+            //Popup
+            other.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        }
+
+        if (other.gameObject.CompareTag("PeekColliderRight"))
         {
             //Popup
             other.gameObject.transform.GetChild(0).gameObject.SetActive(false);
@@ -534,7 +557,6 @@ public class PlayerController : MonoBehaviour
         if (transform.position.y < -45)
         {
             transform.position = spawnPoint;
-            Camera.GetComponent<Rotate>().rotate(0, false);
         }
     }
 
@@ -556,7 +578,7 @@ public class PlayerController : MonoBehaviour
     //For camera follow
     private void LateUpdate()
     {
-        if (!rotateAnimation)
+        if (!rotateAnimation&&!peeking)
         {
             Camera.GetComponent<FollowPlayer>().follow();
         }

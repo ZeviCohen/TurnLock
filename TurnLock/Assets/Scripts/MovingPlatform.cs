@@ -48,7 +48,7 @@ public class MovingPlatform : MonoBehaviour
         {
             collision.gameObject.transform.parent = null;
         }
-        if (collision.gameObject.CompareTag("Box"))
+        if (collision.gameObject.CompareTag("BoxOnPlatform"))
         {
             collision.gameObject.transform.parent = null;
             collision.gameObject.tag = "Box";
