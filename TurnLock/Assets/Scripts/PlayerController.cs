@@ -172,6 +172,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator goInDoorAnimation(Collider other)
     {
+        rb.useGravity = true;
         rb.velocity = Vector3.zero;
         rotateAnimation = true;
         Door door = other.gameObject.GetComponent<Door>();
@@ -277,6 +278,7 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(doorCooldown());
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
+
     private void OnCollisionStay(Collision collision)
     {
         if (!rotateAnimation)
@@ -293,7 +295,7 @@ public class PlayerController : MonoBehaviour
             }
 
             //For Box collision
-            if (collision.gameObject.CompareTag("Box")&& rb.velocity.x <1 && rb.velocity.z<1)
+            if (collision.gameObject.CompareTag("Box"))
             {
                 if (animationDictionary["run"] == 0)
                 {
@@ -301,8 +303,19 @@ public class PlayerController : MonoBehaviour
                     resetAnimations("run");
                 }
                 box = collision.gameObject;
-                box.GetComponent<Rigidbody>().AddForce(new Vector3(box.transform.position.x-transform.position.x, 0, box.transform.position.z - transform.position.z));
+                box.GetComponent<Rigidbody>().AddForce(new Vector3(box.transform.position.x-transform.position.x, 0, box.transform.position.z - transform.position.z)*10);
+                print("hi");
             } 
+        }
+
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Box"))
+        {
+            playerAnim.SetTrigger("idle");
+            resetAnimations("idle");
         }
 
     }

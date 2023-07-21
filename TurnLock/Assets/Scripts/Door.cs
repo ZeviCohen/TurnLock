@@ -54,11 +54,11 @@ public class Door : MonoBehaviour
             yield return new WaitForSeconds(shakeSpeed);
             if (direction == 1)
             {
-                transform.Translate(Vector3.back * Time.deltaTime * 5, Space.World);
+                transform.Translate(Vector3.left * Time.deltaTime * 5, Space.World);
             }
             else if (direction == -1)
             {
-                transform.Translate(Vector3.forward * Time.deltaTime * 5, Space.World);
+                transform.Translate(Vector3.right * Time.deltaTime * 5, Space.World);
             }
             if (i % 2 == 0)
             {
