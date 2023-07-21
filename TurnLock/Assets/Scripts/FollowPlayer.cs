@@ -22,19 +22,19 @@ public class FollowPlayer : MonoBehaviour
     {
         if (transform.rotation.eulerAngles.y == 90)
         {
-            Offset = new Vector3(-57,-40,0);
+            Offset = new Vector3(-50,-40,0);
         }
         else if (transform.rotation.eulerAngles.y == 270)
         {
-            Offset = new Vector3(57,-40,0);
+            Offset = new Vector3(50,-40,0);
         }
         else if (transform.rotation.eulerAngles.y == 0)
         {
-            Offset = new Vector3(0,-40,-57);
+            Offset = new Vector3(0,-40,-50);
         }
         else if (transform.rotation.eulerAngles.y == 180)
         {
-            Offset = new Vector3(0,-40,57);
+            Offset = new Vector3(0,-40,50);
         }
         // update position
         Vector3 targetPosition = target.position + Offset;
