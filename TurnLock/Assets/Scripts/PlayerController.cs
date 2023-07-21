@@ -151,7 +151,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
         rotateAnimation = true;
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.5f);
         transform.Translate(Vector3.back);
         yield return new WaitForSeconds(0.1f);
         transform.Translate(Vector3.back);
@@ -195,7 +195,7 @@ public class PlayerController : MonoBehaviour
         spriteRenderer.enabled = false;
         //Camera rotates
         Camera.GetComponent<Rotate>().rotate(connectingDoor.side, false);
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(2f);
         //Player teleports
         playerAnim.SetTrigger("idle");
         transform.position = door.connectingDoor.transform.position;
@@ -206,7 +206,6 @@ public class PlayerController : MonoBehaviour
         transform.rotation = finishAngles;
         // Player reappears
         spriteRenderer.enabled = true;
-        yield return new WaitForSeconds(2.0f);
         //Player moves out of door
         transform.Translate(Vector3.back);
         yield return new WaitForSeconds(0.1f);
