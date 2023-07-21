@@ -172,6 +172,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator goInDoorAnimation(Collider other)
     {
+        onLadder = false;
         transform.parent = null;
         rb.useGravity = true;
         rb.velocity = Vector3.zero;
