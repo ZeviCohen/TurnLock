@@ -12,11 +12,11 @@ public class BoxOutline : MonoBehaviour
         
     }
 
-    private void OnCollisionStay(Collision collision)
+    private void OnTriggerStay(Collider other)
     {
-        if (collision.gameObject.CompareTag("Box"))
+        if (other.gameObject.CompareTag("Box"))
         {
-            if (collision.gameObject.transform.position.x<transform.position.x+5 && collision.gameObject.transform.position.z < transform.position.z + 5 && collision.gameObject.transform.position.x > transform.position.x - 5 && collision.gameObject.transform.position.z > transform.position.z - 5)
+            if (other.gameObject.transform.position.x<transform.position.x+3 && other.gameObject.transform.position.z < transform.position.z + 3 && other.gameObject.transform.position.x > transform.position.x - 3 && other.gameObject.transform.position.z > transform.position.z - 3 && other.gameObject.transform.position.y < transform.position.y + 3 && other.gameObject.transform.position.y < transform.position.y - 3)
             {
                 reward.SetActive(true);
             }
