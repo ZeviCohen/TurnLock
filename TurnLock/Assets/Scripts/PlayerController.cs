@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     private Animator playerAnim;
     private SpriteRenderer spriteRenderer;
     private Rigidbody rb;
+    public ParticleSystem dirtParticle;
 
     //For Animation
     private IDictionary<string, int> animationDictionary = new Dictionary<string,int>() {
@@ -101,12 +102,14 @@ public class PlayerController : MonoBehaviour
                 }
                 Camera.GetComponent<Rotate>().peekBack();
                 peeking = false;
+                dirtParticle.Play();
             }
             if (horizontalInput == 0 && animationDictionary["idle"] == 0)
             {
                 rb.velocity = new Vector3(0, rb.velocity.y, 0);
                 playerAnim.SetTrigger("idle");
                 resetAnimations("idle");
+                dirtParticle.Stop();
             }
             if (horizontalInput > 0)
             {

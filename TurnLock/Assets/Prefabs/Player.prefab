@@ -62,6 +62,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d40485d3332e476daba47b8e0f17cb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  key: {fileID: 0}
+  spawnPoint: {x: 0, y: 0, z: 0}
+  dirtParticle: {fileID: 1438565936, guid: fb82dfb8d1c7044c69afd2486befecb3, type: 3}
   speed: 50
   velocityMax: 15
   onLadder: 0
@@ -72,8 +75,12 @@ MonoBehaviour:
   box: {fileID: 0}
   forceMagnitude: 5
   rotateAnimation: 0
-  hasKey: 1
+  keyCount: 0
+  startDoorSide: 0
+  endDoorSide: 0
+  lockX: 0
   Camera: {fileID: 0}
+  gravityMultiplier: 30
 --- !u!54 &9070729624943048314
 Rigidbody:
   m_ObjectHideFlags: 0
